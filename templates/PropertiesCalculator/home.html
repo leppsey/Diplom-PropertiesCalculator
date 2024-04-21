@@ -80,8 +80,7 @@
       gap: 16px;
       color: #d35151;
       font-size: 18px;
-      {#outline: 1px solid #d35151;#}
-      padding: 10px;
+    {#outline: 1px solid #d35151;#} padding: 10px;
       border-radius: 4px;
       margin-top: 20px;
       width: 300px;
@@ -147,22 +146,35 @@
     <h1>Properties Calculator</h1>
 
     <form class="index-page__form" action="result">
-      <div class="label-wrapper" >
-        {{ fluids }}
-      </div>
-      <div class="label-wrapper">
-        {{ parameters1 }}
-      </div>
-      <label for="number1" class="label-wrapper">
-        <span>Value #1</span>
-        <input type="number" name="number1" id="number1" placeholder="Enter number">
+
+      <label for="fluid-name">
+        <div class="label-wrapper"><span>Fluid</span>
+          {{ form.fluid_field }}
+        </div>
       </label>
-      <div class="label-wrapper">
-        {{ parameters2 }}
-      </div>
-      <label for="number2" class="label-wrapper">
-        <span>Value #2</span>
-        <input type="number" name="number2" id="number2" placeholder="Enter number">
+      
+      <label for="input-1">
+        <div class="label-wrapper"><span>Input #1</span>
+          {{ form.choice_field1 }}
+        </div>
+      </label>
+      
+      <label for="value-1">
+        <div class="label-wrapper"><span>Value #1</span>
+          {{ form.value_field1 }}
+        </div>
+      </label>
+      
+      <label for="input-2">
+        <div class="label-wrapper"><span>Input #2</span>
+          {{ form.choice_field2 }}
+        </div>
+      </label>
+      
+      <label for="value-2">
+        <div class="label-wrapper"><span>Value #2</span>
+          {{ form.value_field2 }}
+        </div>
       </label>
 
 

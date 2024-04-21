@@ -1,23 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Result</title>
+  <style>
+    html {
+      line-height: 1.15; /* 1 */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    ul,
+    ol {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    body {
+      height: 100dvh;
+      margin: 0 auto;
+    }
+
+    main {
+      height: 100%;
+    }
+
+    .index-page__section {
+      display: flex;
+      flex-direction: column;
+      padding: 24px 64px;
+      margin: 0 auto;
+      align-items: center;
+      justify-content: center;
+      max-width: 1200px;
+      gap: 28px;
+      height: 100%;
+    }
+
+    .result-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      max-width: 300px;
+      text-align: center;
+    }
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+  </style>
 </head>
 <body>
-    <div class="center">
-    The result is: 
-    <h1>{{ans}}</h1>
-    
-    <a href="{% url 'home' %}">Go Back</a>
+<main>
+  <section class="index-page__section">
+    <h1>Calculation Results</h1>
+    <div class="result-container">
+
+      <h2>{{ fluid }}</h2>
+
+      <h3>At the specified state point</h3>
+
+      <ul>
+        <li>
+          <p>Quality [-]</p>
+          <p>{{ form.Q }}</p>
+        </li>
+
+        <li>
+          <p>Temperature [K]</p>
+          <p>{{ form.T }}</p>
+        </li>
+
+        <li>
+          <p>Pressure [kPa]</p>
+          <p>{{ form.P }}</p>
+        </li>
+
+        <li>
+          <p>Density [kg/m3]</p>
+          <p>{{ form.D }}</p>
+        </li>
+
+{#        <li>#}
+{#          <p>Ideal-gas specific heat at constant pressure [kJ/kg/K]</p>#}
+{#          <p>{{ form.C0 }}</p>#}
+{#        </li>#}
+
+        <li>
+          <p>Specific heat at constant pressure [kJ/kg/K]</p>
+          <p>{{ form.C }}</p>
+        </li>
+
+        <li>
+          <p>Specific heat at constant volume [kJ/kg/K]</p>
+          <p>{{ form.O }}</p>
+        </li>
+
+        <li>
+          <p>Internal energy [kJ/kg]</p>
+          <p>{{ form.U }}</p>
+        </li>
+
+        <li>
+          <p>Enthalpy [kJ/kg]</p>
+          <p>{{ form.H }}</p>
+        </li>
+
+        <li>
+          <p>Entropy [kJ/kg/K]</p>
+          <p>{{ form.S }}</p>
+        </li>
+
+        <li>
+          <p>Speed of sound [m/s]</p>
+          <p>{{ form.A }}</p>
+        </li>
+
+        <li>
+          <p>Gibbs function [kJ/kg]</p>
+          <p>{{ form.G }}</p>
+        </li>
+
+        <li>
+          <p>Dynamic viscosity [Pa-s]</p>
+          <p>{{ form.V }}</p>
+        </li>
+
+        <li>
+          <p>Thermal conductivity [kW/m/K]</p>
+          <p>{{ form.L }}</p>
+        </li>
+
+        <li>
+          <p>Surface Tension [N/m]</p>
+          <p>{{ form.I }}</p>
+        </li>
+
+{#        <li>#}
+{#          <p>Accentric Factor [-]</p>#}
+{#          <p>{{ form.w }}</p>#}
+{#        </li>#}
+          
+      </ul>
+
+      <h3>A p-T saturation plot</h3>
+{#      <img src="https://zup.kids/downloads/cute-kitten2.png" width="300" alt="фотка Лехи">#}
+      {{ form.graph }}
     </div>
-    <style>
-      .center {
-        margin: auto;
-        width: 60%;
-        border: 3px solid #a5addb;
-        padding: 10px;
-      }
-    </style>
+  </section>
+</main>
 </body>
 </html>
