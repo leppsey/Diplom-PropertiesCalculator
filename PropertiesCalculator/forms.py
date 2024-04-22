@@ -12,8 +12,10 @@ import CoolProp.Plots as CPP
 #     ("U", "Internal energy [kJ/kg]"), ("H", "Enthalpy [kJ/kg]"), ("S", "Entropy [kJ/kg/K]"),
 #     ("A", "Speed of sound [m/s]"), ("G", "Gibbs function [kJ/kg]"), ("V", "Dynamic viscosity [Pa-s]"),
 #     ("L", "Thermal conductivity [kW/m/K]"), ("I", "Surface Tension [N/m]"), ("w", "Accentric Factor [-]"))
-CHOICES = (("Q", "Quality [-]"), ("T", "Temperature [K]"), ("P", "Pressure [kPa]"), ("D", "Density [kg/m3]"),
-           ("H", "Enthalpy [kJ/kg]"), ("S", "Entropy [kJ/kg/K]"),)
+CHOICES1 = (("P", "Pressure [kPa]"), ("Q", "Quality [-]"), ("T", "Temperature [K]"), ("D", "Density [kg/m3]"),
+            ("H", "Enthalpy [kJ/kg]"), ("S", "Entropy [kJ/kg/K]"),)
+CHOICES2 = (("T", "Temperature [K]"), ("Q", "Quality [-]"), ("P", "Pressure [kPa]"), ("D", "Density [kg/m3]"),
+            ("H", "Enthalpy [kJ/kg]"), ("S", "Entropy [kJ/kg/K]"),)
 
 
 def calculate(name, input_name1, input_prop1, input_name2, input_prop2, fluid_name):
@@ -24,16 +26,15 @@ def calculate(name, input_name1, input_prop1, input_name2, input_prop2, fluid_na
         return error[:error.find(': Pro')]
 
 
-def render_img(fluid):
+def render_img(fluid,graph_type):
     buffer = BytesIO()
-    CPP.Plots.PropertyPlot(fluid, 'pt').savefig(buffer, format='png')
-
+    plt = CPP.Plots.PropertyPlot(fluid, graph_type)
+    plt.calc_isolines()
+    plt.savefig(buffer, format='png')
     buffer.seek(0)
     image_png = buffer.getvalue()
     buffer.close()
-
     graphic = base64.b64encode(image_png)
-    print(graphic.decode('utf-8'))
     return graphic.decode('utf-8')
 
 
@@ -56,7 +57,15 @@ class CalculatedDataForm(forms.Form):
         self.L = calculate("L", input_name1, input_prop1, input_name2, input_prop2, fluid_name)
         self.I = calculate("I", input_name1, input_prop1, input_name2, input_prop2, fluid_name)
         # self.w = calculate("w", input_name1, input_prop1, input_name2, input_prop2, fluid_name)
-        self.graph = render_img(fluid_name)
+        self.graphTS = render_img(fluid_name,'TS')
+        self.graphPH = render_img(fluid_name, 'PH')
+        self.graphHS = render_img(fluid_name, 'HS')
+        self.graphPS = render_img(fluid_name, 'PS')
+        self.graphPD = render_img(fluid_name, 'PD')
+        self.graphTD = render_img(fluid_name, 'TD')
+        self.graphPT = render_img(fluid_name, 'PT')
+
+
         # self.graph=MatplotlibFigureField(figure='figure')
         # print()
 
@@ -66,10 +75,10 @@ class CalculatedDataForm(forms.Form):
 
 class FullForm(forms.Form):
     temp = ()
-    for fluid in CP.FluidsList():
+    for fluid in sorted(CP.FluidsList()):
         temp = temp + ((fluid, fluid),)
     fluid_field = forms.ChoiceField(label='Fluids', choices=temp)
-    choice_field1 = forms.ChoiceField(label='Parameter 1', choices=CHOICES)
+    choice_field1 = forms.ChoiceField(label='Parameter 1', choices=CHOICES1)
     value_field1 = forms.FloatField(label='Value 1', min_value=0)
-    choice_field2 = forms.ChoiceField(label='Parameter 2', choices=CHOICES)
+    choice_field2 = forms.ChoiceField(label='Parameter 2', choices=CHOICES2)
     value_field2 = forms.FloatField(label='Value 2', min_value=0)

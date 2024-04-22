@@ -29,7 +29,7 @@
     }
 
     main {
-      height: 100%;
+      {#height: 100%;#}
     }
 
     .index-page__section {
@@ -44,12 +44,21 @@
       height: 100%;
     }
 
+    .images_container {
+
+      display: flex;
+      width: 100%;
+      flex-wrap: wrap;
+      gap: 8px;
+
+    }
+
     .result-container {
       display: flex;
       flex-direction: column;
       gap: 16px;
       width: 100%;
-      max-width: 300px;
+      max-width: 500px;
       text-align: center;
     }
 
@@ -92,10 +101,10 @@
           <p>{{ form.D }}</p>
         </li>
 
-{#        <li>#}
-{#          <p>Ideal-gas specific heat at constant pressure [kJ/kg/K]</p>#}
-{#          <p>{{ form.C0 }}</p>#}
-{#        </li>#}
+        {#        <li>#}
+        {#          <p>Ideal-gas specific heat at constant pressure [kJ/kg/K]</p>#}
+        {#          <p>{{ form.C0 }}</p>#}
+        {#        </li>#}
 
         <li>
           <p>Specific heat at constant pressure [kJ/kg/K]</p>
@@ -147,16 +156,34 @@
           <p>{{ form.I }}</p>
         </li>
 
-{#        <li>#}
-{#          <p>Accentric Factor [-]</p>#}
-{#          <p>{{ form.w }}</p>#}
-{#        </li>#}
+        {#        <li>#}
+        {#          <p>Accentric Factor [-]</p>#}
+        {#          <p>{{ form.w }}</p>#}
+        {#        </li>#}
 
       </ul>
+      <div class="images_container">
+        <h3>A P-T saturation plot</h3>
+        <img src="data:image/png;base64,{{ form.graphPT }}" alt="NONE">
 
-      <h3>A p-T saturation plot</h3>
-{#      <img src="https://zup.kids/downloads/cute-kitten2.png" width="300" alt="фотка Лехи">#}
-      <img src="data:image/png;base64,{{ form.graph}}" alt="NONE">
+        <h3>A T-S saturation plot</h3>
+        <img src="data:image/png;base64,{{ form.graphTS }}" alt="NONE">
+
+        <h3>A P-H saturation plot</h3>
+        <img src="data:image/png;base64,{{ form.graphPH }}" alt="NONE">
+
+        <h3>A H-S saturation plot</h3>
+        <img src="data:image/png;base64,{{ form.graphHS }}" alt="NONE">
+
+        <h3>A P-S saturation plot</h3>
+        <img src="data:image/png;base64,{{ form.graphPS }}" alt="NONE">
+
+        <h3>A P-D saturation plot</h3>
+        <img src="data:image/png;base64,{{ form.graphPD }}" alt="NONE">
+
+        <h3>A T-D saturation plot</h3>
+        <img src="data:image/png;base64,{{ form.graphTD }}" alt="NONE">
+      </div>
     </div>
   </section>
 </main>
