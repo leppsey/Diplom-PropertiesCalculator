@@ -16,6 +16,6 @@ def result(request):
     num1 = float(request.GET.get('value_field1'))
     num2 = float(request.GET.get('value_field2'))
     form = CalculatedDataForm(choice1, num1, choice2, num2, fluid)
-    graph = CPP.Plots.PropertyPlot(fluid,'pt')
+
     return render(request, 'PropertiesCalculator/result.html',
                   {'form': form, "fluid": fluid})

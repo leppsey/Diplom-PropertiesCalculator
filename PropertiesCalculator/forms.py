@@ -1,8 +1,11 @@
+import base64
+from io import BytesIO
+
 from django import forms
 import CoolProp.CoolProp as CP
 import CoolProp.Plots as CPP
 
-from django_matplotlib import MatplotlibFigureField
+# from django_matplotlib import MatplotlibFigureField
 # CHOICES = (("Q", "Quality [-]"), ("T", "Temperature [K]"), ("P", "Pressure [kPa]"), ("D", "Density [kg/m3]"),
 #     ("C0", "Ideal-gas specific heat at constant pressure [kJ/kg/K]"),
 #     ("C", "Specific heat at constant pressure [kJ/kg/K]"), ("O", "Specific heat at constant volume [kJ/kg/K]"),
@@ -19,6 +22,19 @@ def calculate(name, input_name1, input_prop1, input_name2, input_prop2, fluid_na
     except Exception as error:
         error = str(error)
         return error[:error.find(': Pro')]
+
+
+def render_img(fluid):
+    buffer = BytesIO()
+    CPP.Plots.PropertyPlot(fluid, 'pt').savefig(buffer, format='png')
+
+    buffer.seek(0)
+    image_png = buffer.getvalue()
+    buffer.close()
+
+    graphic = base64.b64encode(image_png)
+    print(graphic.decode('utf-8'))
+    return graphic.decode('utf-8')
 
 
 class CalculatedDataForm(forms.Form):
@@ -40,8 +56,11 @@ class CalculatedDataForm(forms.Form):
         self.L = calculate("L", input_name1, input_prop1, input_name2, input_prop2, fluid_name)
         self.I = calculate("I", input_name1, input_prop1, input_name2, input_prop2, fluid_name)
         # self.w = calculate("w", input_name1, input_prop1, input_name2, input_prop2, fluid_name)
+        self.graph = render_img(fluid_name)
         # self.graph=MatplotlibFigureField(figure='figure')
         # print()
+
+
 #         тут надо покумекать
 
 
