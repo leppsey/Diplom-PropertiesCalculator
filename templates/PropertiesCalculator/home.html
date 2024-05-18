@@ -143,42 +143,26 @@
   <section class="index-page__section">
 
 
-    <h1>Properties Calculator</h1>
+    <h1>Расчет теплофизических и термодинамических свойств</h1>
 
-    <form class="index-page__form" action="result">
+    <form class="index-page__form" action="enter_page">
 
       <label for="fluid-name">
-        <div class="label-wrapper"><span>Fluid</span>
+        <div class="label-wrapper"><span>Вещество</span>
           {{ form.fluid_field }}
         </div>
       </label>
       
       <label for="input-1">
-        <div class="label-wrapper"><span>Input #1</span>
+        <div class="label-wrapper"><span>Изменяемый параметр</span>
           {{ form.choice_field1 }}
         </div>
       </label>
       
-      <label for="value-1">
-        <div class="label-wrapper"><span>Value #1</span>
-          {{ form.value_field1 }}
-        </div>
-      </label>
       
-      <label for="input-2">
-        <div class="label-wrapper"><span>Input #2</span>
-          {{ form.choice_field2 }}
-        </div>
-      </label>
-      
-      <label for="value-2">
-        <div class="label-wrapper"><span>Value #2</span>
-          {{ form.value_field2 }}
-        </div>
-      </label>
 
 
-      <button class="button-30" type="submit">SUBMIT</button>
+      <button class="button-30" type="submit">Рассчитать</button>
     </form>
     <div class="error-container">
       {{ error }}
