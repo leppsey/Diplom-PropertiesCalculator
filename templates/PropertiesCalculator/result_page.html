@@ -29,7 +29,7 @@
     }
 
     main {
-      {#height: 100%;#}
+        height: 100%;
     }
 
     .index-page__section {
@@ -68,26 +68,90 @@
       align-items: center;
       gap: 16px;
     }
+
+    .image-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      text-align: center;
+    }
+
+    .image-title {
+      cursor: pointer;
+    }
+
+    .image-item-active img{
+      display: block;
+    }
+
+    .image-item-inactive img{
+      display: none;
+    }
   </style>
 </head>
 <body>
-<main>
-  <section class="index-page__section">
-    <h1>Результаты расчета</h1>
-    <div class="result-container">
+  <main>
+    <section class="index-page__section">
+      <h1>Результаты расчета</h1>
+      <div class="result-container">
 
-      <h2>{{ fluid }}</h2>
+        <h2>{{ fluid }}</h2>
 
-      
+        <ul class="images_container">
+          <li class="image-item">
+            <h3 class="image-title">График зависимости P-T</h3>
+            <img src="data:image/png;base64,{{ form.graphPT }}" alt="NONE">
+          </li>
 
-     
-      <div class="images_container">
-        <h3>График зависимости P-T</h3>
-        <img src="data:image/png;base64,{{ form.graphPT }}" alt="NONE">
-        
+          <li class="image-item">
+            <h3 class="image-title">График 2</h3>
+            <img src="https://i.ytimg.com/vi/SQJrYw1QvSQ/hqdefault.jpg" alt="NONE">
+          </li>
+        </ul>
+
+
       </div>
-    </div>
-  </section>
-</main>
+    </section>
+  </main>
+
+  <script defer>
+    function activateImage(element) {
+      element.classList.remove('image-item-inactive')
+      element.classList.add('image-item-active')
+    }
+
+    function deactivateImage(element) {
+      element.classList.remove('image-item-active')
+      element.classList.add('image-item-inactive')
+    }
+
+    function deactivateAllImages() {
+      const imageItems = document.querySelectorAll('.image-item')
+      imageItems.forEach((element) => {
+        deactivateImage(element)
+      })
+    }
+
+    function handleImageItemClick(element) {
+      deactivateAllImages()
+      if (element.classList.contains('image-item-inactive')) {
+        activateImage(element)
+      } else {
+        deactivateImage(element)
+      }
+    }
+
+    const imageItems = document.querySelectorAll('.image-item')
+    imageItems.forEach((element) => {
+      element.classList.add('image-item-inactive')
+
+      const imageTitle = element.querySelector('.image-title')
+      imageTitle.addEventListener('click', (_) => handleImageItemClick(element))
+    })
+
+
+  </script>
 </body>
 </html>
