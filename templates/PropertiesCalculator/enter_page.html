@@ -149,24 +149,30 @@
 
       <label for="fluid-name">
         <div class="label-wrapper"><span>Вещество</span>
-          {{ fluid }}
+           {{ fluid }}
+          {{ form.fluid }}
         </div>
       </label>
       
       <label for="input-1">
         <div class="label-wrapper"><span>Изменяемый параметр</span>
-          {{ param }}
+          {{ form.param }} {{ param }}
         </div>
       </label>
       
       <label for="input-1">
         <div class="label-wrapper"><span>Начальное значение</span>
-          
+          {{ form.start }}
         </div>
         
-        <div class="label-wrapper"><span>ge значение</span>
-          {{ form.height }}
-        </div>          
+        <div class="label-wrapper"><span>Конечное значение</span>
+          {{ form.finish }}
+        </div>  
+        
+        <div class="label-wrapper"><span>Шаг</span>
+          {{ form.step }}
+        </div>
+        
 
       </label>
       

@@ -29,7 +29,8 @@ def render_img(fluid, graph_type):
     buffer = BytesIO()
     plt = CPP.Plots.PropertyPlot(fluid, graph_type)
     plt.calc_isolines()
-
+    plt.ylabel('Давление, кПа')
+    plt.xlabel('Температура, К')
     plt.savefig(buffer, format='png')
     buffer.seek(0)
     image_png = buffer.getvalue()
@@ -39,11 +40,15 @@ def render_img(fluid, graph_type):
 
 
 class CalculatedDataForm(forms.Form):
-    def __init__(self, input_name1, input_prop1, input_name2, input_prop2, fluid_name):
+    def __init__(self, fluid,second_param,start,finish,step):
         super().__init__()
-        self.Q = calculate("Q", input_name1, input_prop1, input_name2, input_prop2, fluid_name)
+        first_param='T'
+        if second_param == 'T':
+            first_param = 'P'
 
-        self.graphPT = render_img(fluid_name, 'PT')
+        # self.Q = calculate("Q", second_param, input_prop1, first_param, input_prop2, fluid)
+
+        self.graphPT = render_img(fluid, 'PT')
 
 
 fluidsRU = ['1-Бутен', 'Ацетон', 'Воздух', 'Аммиак', 'Аргон', 'Бензол', 'Диоксид углерода', 'Монооксид углерода',
@@ -86,22 +91,22 @@ class FirstEnterForm(forms.Form):
 
 
 class SecondEnterForm(forms.Form):
-    start_val = forms.FloatField(label='Value 1')
-    end_val = forms.FloatField(label='Value 2')
-    step = forms.FloatField(label='Step', min_value=0.01)
-    def __init__(self, param, fluid_name):
-        super(SecondEnterForm,self).__init__(param, fluid_name)
-        self.param=param
-        self.fluid=fluid_name
-        self.puk=forms.CharField(label='PUK')
+    def __init__(self,fluid,param):
+        super().__init__()
+        self.fields['fluid'] = forms.CharField(widget=forms.HiddenInput(),initial=fluid)
+        self.fields['param'] = forms.CharField(widget=forms.HiddenInput(),initial=param)
+        minimum=0
+        maximum=1000
+        if param=='T':
+            minimum=CP.PropsSI('Ttriple',fluid)
+            maximum=CP.PropsSI('Tcrit',fluid)
 
-class StylesForm(forms.Form):
-    def __init__(self,*args,**kwargs):
-        self.site_id = kwargs.pop('site_id')
-        super(StylesForm,self).__init__(*args,**kwargs)
-        self.fields['height'].widget = forms.TextInput(initial=self.site_id)
+        self.fields['start'] = forms.FloatField(label='start value', min_value=minimum,max_value=maximum,initial=minimum)
+        self.fields['finish'] = forms.FloatField(label='finish value', min_value=minimum,max_value=maximum, initial=maximum)
+        self.fields['step'] = forms.FloatField(label='step value', min_value=0.1, initial=0.1)
 
-    height = forms.CharField()
+
+
 
 
 
