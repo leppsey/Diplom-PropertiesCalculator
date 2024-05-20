@@ -12,10 +12,9 @@ import CoolProp.Plots as CPP
 #     ("U", "Internal energy [kJ/kg]"), ("H", "Enthalpy [kJ/kg]"), ("S", "Entropy [kJ/kg/K]"),
 #     ("A", "Speed of sound [m/s]"), ("G", "Gibbs function [kJ/kg]"), ("V", "Dynamic viscosity [Pa-s]"),
 #     ("L", "Thermal conductivity [kW/m/K]"), ("I", "Surface Tension [N/m]"), ("w", "Accentric Factor [-]"))
-CHOICES1 = (("P", "Pressure [kPa]"), ("Q", "Quality [-]"), ("T", "Temperature [K]"), ("D", "Density [kg/m3]"),
-            ("H", "Enthalpy [kJ/kg]"), ("S", "Entropy [kJ/kg/K]"),)
-CHOICES2 = (("T", "Temperature [K]"), ("Q", "Quality [-]"), ("P", "Pressure [kPa]"), ("D", "Density [kg/m3]"),
-            ("H", "Enthalpy [kJ/kg]"), ("S", "Entropy [kJ/kg/K]"),)
+CHOICES1 = (("P", "Давление [кПa]"), ("T", "Температура [K]"),)
+# CHOICES2 = (("T", "Temperature [K]"), ("Q", "Quality [-]"), ("P", "Pressure [kPa]"), ("D", "Density [kg/m3]"),
+#             ("H", "Enthalpy [kJ/kg]"), ("S", "Entropy [kJ/kg/K]"),)
 
 
 def calculate(name, input_name1, input_prop1, input_name2, input_prop2, fluid_name):
@@ -26,10 +25,12 @@ def calculate(name, input_name1, input_prop1, input_name2, input_prop2, fluid_na
         return error[:error.find(': Pro')]
 
 
-def render_img(fluid,graph_type):
+def render_img(fluid, graph_type):
     buffer = BytesIO()
     plt = CPP.Plots.PropertyPlot(fluid, graph_type)
     plt.calc_isolines()
+    plt.ylabel('Давление, кПа')
+    plt.xlabel('Температура, К')
     plt.savefig(buffer, format='png')
     buffer.seek(0)
     image_png = buffer.getvalue()
@@ -39,46 +40,73 @@ def render_img(fluid,graph_type):
 
 
 class CalculatedDataForm(forms.Form):
-    def __init__(self, input_name1, input_prop1, input_name2, input_prop2, fluid_name):
+    def __init__(self, fluid,second_param,start,finish,step):
         super().__init__()
-        self.Q = calculate("Q", input_name1, input_prop1, input_name2, input_prop2, fluid_name)
-        self.T = calculate("T", input_name1, input_prop1, input_name2, input_prop2, fluid_name)
-        self.P = calculate("P", input_name1, input_prop1, input_name2, input_prop2, fluid_name)
-        self.D = calculate("D", input_name1, input_prop1, input_name2, input_prop2, fluid_name)
-        # self.C0 = calculate("C0", input_name1, input_prop1, input_name2, input_prop2, fluid_name)
-        self.C = calculate("C", input_name1, input_prop1, input_name2, input_prop2, fluid_name)
-        self.O = calculate("O", input_name1, input_prop1, input_name2, input_prop2, fluid_name)
-        self.U = calculate("U", input_name1, input_prop1, input_name2, input_prop2, fluid_name)
-        self.H = calculate("H", input_name1, input_prop1, input_name2, input_prop2, fluid_name)
-        self.S = calculate("S", input_name1, input_prop1, input_name2, input_prop2, fluid_name)
-        self.A = calculate("A", input_name1, input_prop1, input_name2, input_prop2, fluid_name)
-        self.G = calculate("G", input_name1, input_prop1, input_name2, input_prop2, fluid_name)
-        self.V = calculate("V", input_name1, input_prop1, input_name2, input_prop2, fluid_name)
-        self.L = calculate("L", input_name1, input_prop1, input_name2, input_prop2, fluid_name)
-        self.I = calculate("I", input_name1, input_prop1, input_name2, input_prop2, fluid_name)
-        # self.w = calculate("w", input_name1, input_prop1, input_name2, input_prop2, fluid_name)
-        self.graphTS = render_img(fluid_name,'TS')
-        self.graphPH = render_img(fluid_name, 'PH')
-        self.graphHS = render_img(fluid_name, 'HS')
-        self.graphPS = render_img(fluid_name, 'PS')
-        self.graphPD = render_img(fluid_name, 'PD')
-        self.graphTD = render_img(fluid_name, 'TD')
-        self.graphPT = render_img(fluid_name, 'PT')
+        first_param='T'
+        if second_param == 'T':
+            first_param = 'P'
+
+        # self.Q = calculate("Q", second_param, input_prop1, first_param, input_prop2, fluid)
+
+        self.graphPT = render_img(fluid, 'PT')
 
 
-        # self.graph=MatplotlibFigureField(figure='figure')
-        # print()
+fluidsRU = ['1-Бутен', 'Ацетон', 'Воздух', 'Аммиак', 'Аргон', 'Бензол', 'Диоксид углерода', 'Монооксид углерода',
+            'Карбонилсульфид', 'цис-2-Бутен', 'Циклогексан', 'Циклопентан', 'Циклопропан', 'D4', 'D5', 'D6', 'Дейтерий',
+            'Дихлорэтан', 'Диэтиловый эфир', 'Диметилкарбонат', 'Диметиловый эфир', 'Этан', 'Этанол', 'Этилбензол',
+            'Этилен', 'Оксид этилена', 'Фтор', 'Тяжёлая вода', 'Гелий', 'HFE143m', 'Водород', 'Хлороводород',
+            'Сероводород', 'Изобутан', 'Изобутен', 'Изогексан', 'Изопентан', 'Криптон', 'м-Ксилол', 'MD2M', 'MD3M',
+            'MD4M', 'MDM', 'Метан', 'Метанол', 'Метиллинолеат', 'Метиллиноленат', 'Метилоолеат', 'Метилпальмитат',
+            'Метилстеарат', 'MM', 'н-Бутан', 'н-Декан', 'н-Додекан', 'н-Гептан', 'н-Гексан', 'н-Нонан', 'н-Октан',
+            'н-Пентан', 'н-Пропан', 'н-Ундекан', 'Неон', 'Неопентан', 'Азот', 'Закись азота', 'Novec649', 'о-Ксилол',
+            'Орто-Дейтерий', 'Орто-Водород', 'Кислород', 'п-Ксилол', 'Пара-Дейтерий', 'Пара-Водород', 'Пропилен',
+            'Пропин', 'R11', 'R113', 'R114', 'R115', 'R116', 'R12', 'R123', 'R1233zd(E)', 'R1234yf', 'R1234ze(E)',
+            'R1234ze(Z)', 'R124', 'R1243zf', 'R125', 'R13', 'R134a', 'R13I1', 'R14', 'R141b', 'R142b', 'R143a', 'R152A',
+            'R161', 'R21', 'R218', 'R22', 'R227EA', 'R23', 'R236EA', 'R236FA', 'R245ca', 'R245fa', 'R32', 'R365MFC',
+            'R40', 'R404A', 'R407C', 'R41', 'R410A', 'R507A', 'RC318', 'SES36', 'Диоксид серы', 'Гексафторид серы',
+            'Толуол', 'транс-2-Бутен', 'Вода', 'Ксенон']
+fluids = ['1-Butene', 'Acetone', 'Air', 'Ammonia', 'Argon', 'Benzene', 'CarbonDioxide', 'CarbonMonoxide',
+          'CarbonylSulfide', 'cis-2-Butene', 'CycloHexane', 'Cyclopentane', 'CycloPropane', 'D4', 'D5', 'D6',
+          'Deuterium', 'Dichloroethane', 'DiethylEther', 'DimethylCarbonate', 'DimethylEther', 'Ethane', 'Ethanol',
+          'EthylBenzene', 'Ethylene', 'EthyleneOxide', 'Fluorine', 'HeavyWater', 'Helium', 'HFE143m', 'Hydrogen',
+          'HydrogenChloride', 'HydrogenSulfide', 'IsoButane', 'IsoButene', 'Isohexane', 'Isopentane', 'Krypton',
+          'm-Xylene', 'MD2M', 'MD3M', 'MD4M', 'MDM', 'Methane', 'Methanol', 'MethylLinoleate', 'MethylLinolenate',
+          'MethylOleate', 'MethylPalmitate', 'MethylStearate', 'MM', 'n-Butane', 'n-Decane', 'n-Dodecane', 'n-Heptane',
+          'n-Hexane', 'n-Nonane', 'n-Octane', 'n-Pentane', 'n-Propane', 'n-Undecane', 'Neon', 'Neopentane', 'Nitrogen',
+          'NitrousOxide', 'Novec649', 'o-Xylene', 'OrthoDeuterium', 'OrthoHydrogen', 'Oxygen', 'p-Xylene',
+          'ParaDeuterium', 'ParaHydrogen', 'Propylene', 'Propyne', 'R11', 'R113', 'R114', 'R115', 'R116', 'R12', 'R123',
+          'R1233zd(E)', 'R1234yf', 'R1234ze(E)', 'R1234ze(Z)', 'R124', 'R1243zf', 'R125', 'R13', 'R134a', 'R13I1',
+          'R14', 'R141b', 'R142b', 'R143a', 'R152A', 'R161', 'R21', 'R218', 'R22', 'R227EA', 'R23', 'R236EA', 'R236FA',
+          'R245ca', 'R245fa', 'R32', 'R365MFC', 'R40', 'R404A', 'R407C', 'R41', 'R410A', 'R507A', 'RC318', 'SES36',
+          'SulfurDioxide', 'SulfurHexafluoride', 'Toluene', 'trans-2-Butene', 'Water', 'Xenon']
 
 
-#         тут надо покумекать
-
-
-class FullForm(forms.Form):
+class FirstEnterForm(forms.Form):
     temp = ()
-    for fluid in sorted(CP.FluidsList()):
-        temp = temp + ((fluid, fluid),)
+    for fluid, fluidRU in zip(fluids, fluidsRU):
+        temp = temp + ((fluid, fluidRU),)
+
     fluid_field = forms.ChoiceField(label='Fluids', choices=temp)
-    choice_field1 = forms.ChoiceField(label='Parameter 1', choices=CHOICES1)
-    value_field1 = forms.FloatField(label='Value 1', min_value=0)
-    choice_field2 = forms.ChoiceField(label='Parameter 2', choices=CHOICES2)
-    value_field2 = forms.FloatField(label='Value 2', min_value=0)
+    param_field = forms.ChoiceField(label='Parameter', choices=CHOICES1)
+
+
+class SecondEnterForm(forms.Form):
+    def __init__(self,fluid,param):
+        super().__init__()
+        self.fields['fluid'] = forms.CharField(widget=forms.HiddenInput(),initial=fluid)
+        self.fields['param'] = forms.CharField(widget=forms.HiddenInput(),initial=param)
+        minimum=0
+        maximum=1000
+        if param=='T':
+            minimum=CP.PropsSI('Ttriple',fluid)
+            maximum=CP.PropsSI('Tcrit',fluid)
+
+        self.fields['start'] = forms.FloatField(label='start value', min_value=minimum,max_value=maximum,initial=minimum)
+        self.fields['finish'] = forms.FloatField(label='finish value', min_value=minimum,max_value=maximum, initial=maximum)
+        self.fields['step'] = forms.FloatField(label='step value', min_value=0.1, initial=0.1)
+
+
+
+
+
+

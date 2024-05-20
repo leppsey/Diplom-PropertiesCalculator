@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Result</title>
+  <style>
+    html {
+      line-height: 1.15; /* 1 */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    ul,
+    ol {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    body {
+      height: 100dvh;
+      margin: 0 auto;
+    }
+
+    main {
+      {#height: 100%;#}
+    }
+
+    .index-page__section {
+      display: flex;
+      flex-direction: column;
+      padding: 24px 64px;
+      margin: 0 auto;
+      align-items: center;
+      justify-content: center;
+      max-width: 1200px;
+      gap: 28px;
+      height: 100%;
+    }
+
+    .images_container {
+
+      display: flex;
+      width: 100%;
+      flex-wrap: wrap;
+      gap: 8px;
+
+    }
+
+    .result-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <section class="index-page__section">
+    <h1>Результаты расчета</h1>
+    <div class="result-container">
+
+      <h2>{{ fluid }}</h2>
+
+      
+
+     
+      <div class="images_container">
+        <h3>График зависимости P-T</h3>
+        <img src="data:image/png;base64,{{ form.graphPT }}" alt="NONE">
+        
+      </div>
+    </div>
+  </section>
+</main>
+</body>
+</html>
