@@ -5,7 +5,6 @@ from django import forms
 import CoolProp.CoolProp as CP
 import CoolProp.Plots as CPP
 
-# from django_matplotlib import MatplotlibFigureField
 # CHOICES = (("Q", "Quality [-]"), ("T", "Temperature [K]"), ("P", "Pressure [kPa]"), ("D", "Density [kg/m3]"),
 #     ("C0", "Ideal-gas specific heat at constant pressure [kJ/kg/K]"),
 #     ("C", "Specific heat at constant pressure [kJ/kg/K]"), ("O", "Specific heat at constant volume [kJ/kg/K]"),
@@ -13,6 +12,8 @@ import CoolProp.Plots as CPP
 #     ("A", "Speed of sound [m/s]"), ("G", "Gibbs function [kJ/kg]"), ("V", "Dynamic viscosity [Pa-s]"),
 #     ("L", "Thermal conductivity [kW/m/K]"), ("I", "Surface Tension [N/m]"), ("w", "Accentric Factor [-]"))
 CHOICES1 = (("P", "Давление [кПa]"), ("T", "Температура [K]"),)
+
+
 # CHOICES2 = (("T", "Temperature [K]"), ("Q", "Quality [-]"), ("P", "Pressure [kPa]"), ("D", "Density [kg/m3]"),
 #             ("H", "Enthalpy [kJ/kg]"), ("S", "Entropy [kJ/kg/K]"),)
 
@@ -21,8 +22,8 @@ def calculate(name, input_name1, input_prop1, input_name2, input_prop2, fluid_na
     try:
         return CP.PropsSI(name, input_name1, input_prop1, input_name2, input_prop2, fluid_name)
     except Exception as error:
-        error = str(error)
-        return error[:error.find(': Pro')]
+
+        return '-'
 
 
 def render_img(fluid, graph_type):
@@ -40,13 +41,32 @@ def render_img(fluid, graph_type):
 
 
 class CalculatedDataForm(forms.Form):
-    def __init__(self, fluid,second_param,start,finish,step):
+    def __init__(self, fluid, param, start, finish, step):
         super().__init__()
-        first_param='T'
-        if second_param == 'T':
-            first_param = 'P'
 
-        # self.Q = calculate("Q", second_param, input_prop1, first_param, input_prop2, fluid)
+        self.T = ['Температура, К']
+        self.P = ['Давление, кПа']
+        self.D = ['Плотность, кг/м3']
+        self.H = ['Энтальпия, кДж / кг']
+        self.S = ['Энтропия, кДж / кг / К']
+        self.G = ['Функция Гиббса, кДж / кг']
+        self.V = ['Динамическая вязкость, Па - с']
+        self.L = ['Теплопроводность, кВт / м / К']
+        i = 1
+        start=float(start)
+        finish=float(finish)
+        step=float(step)
+        while start <= finish:
+            self.T.append(calculate("T", param, start, 'Q', 0, fluid))
+            self.P.append(calculate("P", param, start, 'Q', 0, fluid))
+            self.D.append(calculate("D", param, start, 'Q', 0, fluid))
+            self.H.append(calculate("H", param, start, 'Q', 0, fluid))
+            self.S.append(calculate("S", param, start, 'Q', 0, fluid))
+            self.G.append(calculate("G", param, start, 'Q', 0, fluid))
+            self.V.append(calculate("V", param, start, 'Q', 0, fluid))
+            self.L.append(calculate("L", param, start, 'Q', 0, fluid))
+            i += 1
+            start += step
 
         self.graphPT = render_img(fluid, 'PT')
 
@@ -91,22 +111,21 @@ class FirstEnterForm(forms.Form):
 
 
 class SecondEnterForm(forms.Form):
-    def __init__(self,fluid,param):
+    def __init__(self, fluid, param):
         super().__init__()
-        self.fields['fluid'] = forms.CharField(widget=forms.HiddenInput(),initial=fluid)
-        self.fields['param'] = forms.CharField(widget=forms.HiddenInput(),initial=param)
-        minimum=0
-        maximum=1000
-        if param=='T':
-            minimum=CP.PropsSI('Ttriple',fluid)
-            maximum=CP.PropsSI('Tcrit',fluid)
+        self.fields['fluid'] = forms.CharField(widget=forms.HiddenInput(), initial=fluid)
+        self.fields['param'] = forms.CharField(widget=forms.HiddenInput(), initial=param)
+        if param == 'T':
+            minimum = CP.PropsSI('Ttriple', fluid)
+            maximum = CP.PropsSI('Tcrit', fluid)
 
-        self.fields['start'] = forms.FloatField(label='start value', min_value=minimum,max_value=maximum,initial=minimum)
-        self.fields['finish'] = forms.FloatField(label='finish value', min_value=minimum,max_value=maximum, initial=maximum)
-        self.fields['step'] = forms.FloatField(label='step value', min_value=0.1, initial=0.1)
+        else:
+            minimum = CP.PropsSI('ptriple', fluid)
+            maximum = CP.PropsSI('pcrit', fluid)
 
-
-
-
-
-
+        self.fields['start'] = forms.FloatField(label='start value', min_value=minimum, max_value=maximum,
+                                                initial=minimum)
+        self.fields['finish'] = forms.FloatField(label='finish value', min_value=minimum, max_value=maximum,
+                                                 initial=maximum)
+        self.fields['step'] = forms.FloatField(label='step value', min_value=0.1, initial=(maximum - minimum) / 10,
+                                               max_value=(maximum - minimum))

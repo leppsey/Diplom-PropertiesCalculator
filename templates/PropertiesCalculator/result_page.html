@@ -29,7 +29,7 @@
     }
 
     main {
-        height: 100%;
+      height: 100%;
     }
 
     .index-page__section {
@@ -82,76 +82,129 @@
       cursor: pointer;
     }
 
-    .image-item-active img{
+    .image-item-active img {
       display: block;
     }
 
-    .image-item-inactive img{
+    .image-item-inactive img {
       display: none;
     }
   </style>
 </head>
 <body>
-  <main>
-    <section class="index-page__section">
-      <h1>Результаты расчета</h1>
-      <div class="result-container">
+<main>
+  <section class="index-page__section">
+    <h1>Результаты расчета</h1>
+    <div class="result-container">
 
-        <h2>{{ fluid }}</h2>
+      <h2>{{ fluid }}</h2>
 
-        <ul class="images_container">
-          <li class="image-item">
-            <h3 class="image-title">График зависимости P-T</h3>
-            <img src="data:image/png;base64,{{ form.graphPT }}" alt="NONE">
-          </li>
+      <ul class="images_container">
+        <li class="image-item">
+          <h3 class="image-title">Таблица насыщения</h3>
 
-          <li class="image-item">
-            <h3 class="image-title">График 2</h3>
-            <img src="https://i.ytimg.com/vi/SQJrYw1QvSQ/hqdefault.jpg" alt="NONE">
-          </li>
-        </ul>
+          <table>
+            <tbody>
+            <td>
+              {% for item in form.T %}
+                <tl>{{ item }}</tl>
+              {% endfor %}
+            </td>
+            
+            <td>
+              {% for item in form.P %}
+                <tl>{{ item }}</tl>
+              {% endfor %}
+            </td>
+            
+            <td>
+              {% for item in form.D %}
+                <tl>{{ item }}</tl>
+              {% endfor %}
+            </td>
+            
+            <td>
+              {% for item in form.H %}
+                <tl>{{ item }}</tl>
+              {% endfor %}
+            </td>
+            
+            <td>
+              {% for item in form.S %}
+                <tl>{{ item }}</tl>
+              {% endfor %}
+            </td>
+            
+            <td>
+              {% for item in form.G %}
+                <tl>{{ item }}</tl>
+              {% endfor %}
+            </td>
+            
+            <td>
+              {% for item in form.V %}
+                <tl>{{ item }}</tl>
+              {% endfor %}
+            </td>
+            
+            <td>
+              {% for item in form.L %}
+                <tl>{{ item }}</tl>
+              {% endfor %}
+            </td>
+
+            </tbody>
+          </table>
+
+        </li>
+
+        <li class="image-item">
+          <h3 class="image-title">График зависимости P-T</h3>
+          <img src="data:image/png;base64,{{ form.graphPT }}" alt="NONE">
+        </li>
+      </ul>
 
 
-      </div>
-    </section>
-  </main>
+    </div>
+  </section>
+</main>
 
-  <script defer>
-    function activateImage(element) {
-      element.classList.remove('image-item-inactive')
-      element.classList.add('image-item-active')
-    }
+<script defer>
+  function activateImage(element) {
+    element.classList.remove('image-item-inactive')
+    element.classList.add('image-item-active')
+  }
 
-    function deactivateImage(element) {
-      element.classList.remove('image-item-active')
-      element.classList.add('image-item-inactive')
-    }
+  function deactivateImage(element) {
+    element.classList.remove('image-item-active')
+    element.classList.add('image-item-inactive')
+  }
 
-    function deactivateAllImages() {
-      const imageItems = document.querySelectorAll('.image-item')
-      imageItems.forEach((element) => {
-        deactivateImage(element)
-      })
-    }
-
-    function handleImageItemClick(element) {
-      deactivateAllImages()
-      if (element.classList.contains('image-item-inactive')) {
-        activateImage(element)
-      } else {
-        deactivateImage(element)
-      }
-    }
-
+  function deactivateAllImages() {
     const imageItems = document.querySelectorAll('.image-item')
     imageItems.forEach((element) => {
-      element.classList.add('image-item-inactive')
-
-      const imageTitle = element.querySelector('.image-title')
-      imageTitle.addEventListener('click', (_) => handleImageItemClick(element))
+      deactivateImage(element)
     })
+  }
+
+  function handleImageItemClick(element) {
+    deactivateAllImages()
+    if (element.classList.contains('image-item-inactive')) {
+      activateImage(element)
+    } else {
+      deactivateImage(element)
+    }
+  }
+
+  const imageItems = document.querySelectorAll('.image-item')
+  imageItems.forEach((element) => {
+    element.classList.add('image-item-inactive')
+
+    const imageTitle = element.querySelector('.image-title')
+    imageTitle.addEventListener('click', (_) => handleImageItemClick(element))
+  })
 
 
-  </script>
+</script>
 </body>
 </html>
