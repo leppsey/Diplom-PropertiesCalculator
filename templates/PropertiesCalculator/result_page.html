@@ -80,109 +80,11 @@
 
       <h3>At the specified state point</h3>
 
-      <ul>
-        <li>
-          <p>Quality [-]</p>
-          <p>{{ form.Q }}</p>
-        </li>
-
-        <li>
-          <p>Temperature [K]</p>
-          <p>{{ form.T }}</p>
-        </li>
-
-        <li>
-          <p>Pressure [kPa]</p>
-          <p>{{ form.P }}</p>
-        </li>
-
-        <li>
-          <p>Density [kg/m3]</p>
-          <p>{{ form.D }}</p>
-        </li>
-
-        {#        <li>#}
-        {#          <p>Ideal-gas specific heat at constant pressure [kJ/kg/K]</p>#}
-        {#          <p>{{ form.C0 }}</p>#}
-        {#        </li>#}
-
-        <li>
-          <p>Specific heat at constant pressure [kJ/kg/K]</p>
-          <p>{{ form.C }}</p>
-        </li>
-
-        <li>
-          <p>Specific heat at constant volume [kJ/kg/K]</p>
-          <p>{{ form.O }}</p>
-        </li>
-
-        <li>
-          <p>Internal energy [kJ/kg]</p>
-          <p>{{ form.U }}</p>
-        </li>
-
-        <li>
-          <p>Enthalpy [kJ/kg]</p>
-          <p>{{ form.H }}</p>
-        </li>
-
-        <li>
-          <p>Entropy [kJ/kg/K]</p>
-          <p>{{ form.S }}</p>
-        </li>
-
-        <li>
-          <p>Speed of sound [m/s]</p>
-          <p>{{ form.A }}</p>
-        </li>
-
-        <li>
-          <p>Gibbs function [kJ/kg]</p>
-          <p>{{ form.G }}</p>
-        </li>
-
-        <li>
-          <p>Dynamic viscosity [Pa-s]</p>
-          <p>{{ form.V }}</p>
-        </li>
-
-        <li>
-          <p>Thermal conductivity [kW/m/K]</p>
-          <p>{{ form.L }}</p>
-        </li>
-
-        <li>
-          <p>Surface Tension [N/m]</p>
-          <p>{{ form.I }}</p>
-        </li>
-
-        {#        <li>#}
-        {#          <p>Accentric Factor [-]</p>#}
-        {#          <p>{{ form.w }}</p>#}
-        {#        </li>#}
-
-      </ul>
+     
       <div class="images_container">
         <h3>A P-T saturation plot</h3>
         <img src="data:image/png;base64,{{ form.graphPT }}" alt="NONE">
-
-        <h3>A T-S saturation plot</h3>
-        <img src="data:image/png;base64,{{ form.graphTS }}" alt="NONE">
-
-        <h3>A P-H saturation plot</h3>
-        <img src="data:image/png;base64,{{ form.graphPH }}" alt="NONE">
-
-        <h3>A H-S saturation plot</h3>
-        <img src="data:image/png;base64,{{ form.graphHS }}" alt="NONE">
-
-        <h3>A P-S saturation plot</h3>
-        <img src="data:image/png;base64,{{ form.graphPS }}" alt="NONE">
-
-        <h3>A P-D saturation plot</h3>
-        <img src="data:image/png;base64,{{ form.graphPD }}" alt="NONE">
-
-        <h3>A T-D saturation plot</h3>
-        <img src="data:image/png;base64,{{ form.graphTD }}" alt="NONE">
+        
       </div>
     </div>
   </section>
