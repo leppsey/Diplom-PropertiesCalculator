@@ -18,9 +18,9 @@ CHOICES1 = (("P", "Давление [кПa]"), ("T", "Температура [K]
 #             ("H", "Enthalpy [kJ/kg]"), ("S", "Entropy [kJ/kg/K]"),)
 
 
-def calculate(name, input_name1, input_prop1, input_name2, input_prop2, fluid_name):
+def calculate(name, input_name1, input_prop1, input_name2, input_prop2, fluid_name, dig=2):
     try:
-        return CP.PropsSI(name, input_name1, input_prop1, input_name2, input_prop2, fluid_name)
+        return round(CP.PropsSI(name, input_name1, input_prop1, input_name2, input_prop2, fluid_name), dig)
     except Exception as error:
 
         return '-'
@@ -47,27 +47,30 @@ class CalculatedDataForm(forms.Form):
         self.T = ['Температура, К']
         self.P = ['Давление, кПа']
         self.D = ['Плотность, кг/м3']
-        self.H = ['Энтальпия, кДж / кг']
-        self.S = ['Энтропия, кДж / кг / К']
-        self.G = ['Функция Гиббса, кДж / кг']
-        self.V = ['Динамическая вязкость, Па - с']
-        self.L = ['Теплопроводность, кВт / м / К']
+        self.H = ['Энтальпия, кДж/кг']
+        self.S = ['Энтропия, кДж/кг/К']
+        self.C = ['Теплоемкость при постоянном объеме, Дж/кг/К']
+        self.PRANDTL = ['Число Прандтля']
+        self.V = ['Динамическая вязкость, Па-с']
+        self.L = ['Теплопроводность, кВт/м/К']
         i = 1
-        start=float(start)
-        finish=float(finish)
-        step=float(step)
+        start = float(start)
+        finish = float(finish)
+        step = float(step)
+
         while start <= finish:
             self.T.append(calculate("T", param, start, 'Q', 0, fluid))
             self.P.append(calculate("P", param, start, 'Q', 0, fluid))
             self.D.append(calculate("D", param, start, 'Q', 0, fluid))
             self.H.append(calculate("H", param, start, 'Q', 0, fluid))
-            self.S.append(calculate("S", param, start, 'Q', 0, fluid))
-            self.G.append(calculate("G", param, start, 'Q', 0, fluid))
+            self.S.append(calculate("S", param, start, 'Q', 0, fluid, 4))
+            self.C.append(calculate("CVMASS", param, start, 'Q', 0, fluid, 4))
+            self.PRANDTL.append(calculate("PRANDTL", param, start, 'Q', 0, fluid))
             self.V.append(calculate("V", param, start, 'Q', 0, fluid))
             self.L.append(calculate("L", param, start, 'Q', 0, fluid))
             i += 1
             start += step
-
+        #     для расчета перегретых паров calculate("P", param, start, const_param, const_param_value, fluid)
         self.graphPT = render_img(fluid, 'PT')
 
 
@@ -116,12 +119,12 @@ class SecondEnterForm(forms.Form):
         self.fields['fluid'] = forms.CharField(widget=forms.HiddenInput(), initial=fluid)
         self.fields['param'] = forms.CharField(widget=forms.HiddenInput(), initial=param)
         if param == 'T':
-            minimum = CP.PropsSI('Ttriple', fluid)
-            maximum = CP.PropsSI('Tcrit', fluid)
+            minimum = round(CP.PropsSI('Ttriple', fluid),2)
+            maximum = round(CP.PropsSI('Tcrit', fluid),2)
 
         else:
-            minimum = CP.PropsSI('ptriple', fluid)
-            maximum = CP.PropsSI('pcrit', fluid)
+            minimum = round(CP.PropsSI('ptriple', fluid),2)
+            maximum = round(CP.PropsSI('pcrit', fluid),2)
 
         self.fields['start'] = forms.FloatField(label='start value', min_value=minimum, max_value=maximum,
                                                 initial=minimum)

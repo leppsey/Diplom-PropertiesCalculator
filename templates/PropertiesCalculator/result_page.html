@@ -101,7 +101,7 @@
 
       <ul class="images_container">
         <li class="image-item">
-          <h3 class="image-title">Таблица насыщения</h3>
+          <h3 class="image-title">Таблица теплофизических свойств</h3>
 
           <table>
             <tbody>
@@ -110,53 +110,75 @@
                 <br>{{ item }}</br>
               {% endfor %}
             </td>
-            
+
             <td>
               {% for item in form.P %}
                 <br>{{ item }}</br>
               {% endfor %}
             </td>
-            
+
             <td>
               {% for item in form.D %}
                 <br>{{ item }}</br>
               {% endfor %}
             </td>
-            
+
             <td>
               {% for item in form.H %}
                 <br>{{ item }}</br>
               {% endfor %}
             </td>
-            
+
             <td>
               {% for item in form.S %}
                 <br>{{ item }}</br>
               {% endfor %}
             </td>
-            
-            <td>
-              {% for item in form.G %}
-                <br>{{ item }}</br>
-              {% endfor %}
-            </td>
-            
-            <td>
-              {% for item in form.V %}
-                <br>{{ item }}</br>
-              {% endfor %}
-            </td>
-            
-            <td>
-              {% for item in form.L %}
-                <br>{{ item }}</br>
-              {% endfor %}
-            </td>
+
 
             </tbody>
           </table>
 
+        <h3 class="image-title">Таблица термодинамических свойств</h3>
         </li>
+        <table>
+          <tbody>
+          <td>
+            {% for item in form.T %}
+              <br>{{ item }}</br>
+            {% endfor %}
+          </td>
+
+          <td>
+            {% for item in form.P %}
+              <br>{{ item }}</br>
+            {% endfor %}
+          </td>
+          <td>
+            {% for item in form.C %}
+              <br>{{ item }}</br>
+            {% endfor %}
+          </td>
+
+          <td>
+            {% for item in form.PRANDTL %}
+              <br>{{ item }}</br>
+            {% endfor %}
+          </td>
+
+          <td>
+            {% for item in form.V %}
+              <br>{{ item }}</br>
+            {% endfor %}
+          </td>
+
+          <td>
+            {% for item in form.L %}
+              <br>{{ item }}</br>
+            {% endfor %}
+          </td>
+          </tbody>
+        </table>
 
         <li class="image-item">
           <h3 class="image-title">График зависимости P-T</h3>
