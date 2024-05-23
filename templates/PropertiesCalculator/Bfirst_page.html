@@ -154,16 +154,18 @@
       </label>
 
       <label for="input-1">
+        <div class="label-wrapper"><span>Не изменяемый параметр</span>
+          {{ form.const_param_field }}
+        </div>
+      </label>
+      
+      <label for="input-1">
         <div class="label-wrapper"><span>Изменяемый параметр</span>
           {{ form.param_field }}
         </div>
       </label>
 
-      <label for="input-1">
-        <div class="label-wrapper"><span>Постоянный параметр</span>
-          {{ form.const_param_field }}
-        </div>
-      </label>
+      
 
 
 

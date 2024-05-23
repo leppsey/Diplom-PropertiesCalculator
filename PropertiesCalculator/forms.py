@@ -4,6 +4,7 @@ from io import BytesIO
 from django import forms
 import CoolProp.CoolProp as CP
 import CoolProp.Plots as CPP
+from django.core.exceptions import ValidationError
 
 # CHOICES = (("Q", "Quality [-]"), ("T", "Temperature [K]"), ("P", "Pressure [kPa]"), ("D", "Density [kg/m3]"),
 #     ("C0", "Ideal-gas specific heat at constant pressure [kJ/kg/K]"),
@@ -12,10 +13,9 @@ import CoolProp.Plots as CPP
 #     ("A", "Speed of sound [m/s]"), ("G", "Gibbs function [kJ/kg]"), ("V", "Dynamic viscosity [Pa-s]"),
 #     ("L", "Thermal conductivity [kW/m/K]"), ("I", "Surface Tension [N/m]"), ("w", "Accentric Factor [-]"))
 CHOICES_A = (("P", "Давление [кПa]"), ("T", "Температура [K]"),)
-CHOICES_B = (("P", "Давление [кПa]"), ("T", "Температура [K]"),("D", "Плотность [кг/м3]"),)
-CHOICES_CONST = (("P", "Давление [кПa]"), ("T", "Температура [K]"),("D", "Плотность [кг/м3]"),
-             ("H", "Энтальпия [кДж/кг]"), ("S", "Энтропия [кДж/кг/K]"),)
-
+CHOICES_B = (("P", "Давление [кПa]"), ("T", "Температура [K]"), ("D", "Плотность [кг/м3]"),)
+CHOICES_CONST = (("T", "Температура [K]"), ("P", "Давление [кПa]"), ("D", "Плотность [кг/м3]"),
+                 ("H", "Энтальпия [кДж/кг]"), ("S", "Энтропия [кДж/кг/K]"),)
 
 # CHOICES2 = (("T", "Temperature [K]"), ("Q", "Quality [-]"), ("P", "Pressure [kPa]"), ("D", "Density [kg/m3]"),
 #             ("H", "Enthalpy [kJ/kg]"), ("S", "Entropy [kJ/kg/K]"),)
@@ -25,7 +25,7 @@ def calculate(name, input_name1, input_prop1, input_name2, input_prop2, fluid_na
     try:
         return round(CP.PropsSI(name, input_name1, input_prop1, input_name2, input_prop2, fluid_name), dig)
     except Exception as error:
-
+        # return error
         return '-'
 
 
@@ -50,8 +50,8 @@ class ACalculatedDataForm(forms.Form):
         self.T = ['Температура, К']
         self.P = ['Давление, кПа']
         self.D = ['Плотность, кг/м3']
-        self.H = ['Энтальпия, кДж/кг']
-        self.S = ['Энтропия, кДж/кг/К']
+        self.H = ['Энтальпия, Дж/кг']
+        self.S = ['Энтропия, Дж/кг/К']
         self.C = ['Теплоемкость при постоянном объеме, Дж/кг/К']
         self.PRANDTL = ['Число Прандтля']
         self.V = ['Динамическая вязкость, Па-с']
@@ -74,6 +74,38 @@ class ACalculatedDataForm(forms.Form):
             i += 1
             start += step
         #     для расчета перегретых паров calculate("P", param, start, const_param, const_param_value, fluid)
+        self.graphPT = render_img(fluid, 'PT')
+
+class BCalculatedDataForm(forms.Form):
+    def __init__(self, fluid, param, start, finish, step,const_param_value,const_param):
+        super().__init__()
+
+        self.T = ['Температура, К']
+        self.P = ['Давление, кПа']
+        self.D = ['Плотность, кг/м3']
+        self.H = ['Энтальпия, кДж/кг']
+        self.S = ['Энтропия, кДж/кг/К']
+        self.C = ['Теплоемкость при постоянном объеме, Дж/кг/К']
+        self.PRANDTL = ['Число Прандтля']
+        self.V = ['Динамическая вязкость, Па-с']
+        self.L = ['Теплопроводность, кВт/м/К']
+        i = 1
+        start = float(start)
+        finish = float(finish)
+        step = float(step)
+        const_param_value=float(const_param_value)
+        while start <= finish:
+            self.T.append(calculate("T", param, start, const_param, const_param_value, fluid))
+            self.P.append(calculate("P", param, start, const_param, const_param_value, fluid))
+            self.D.append(calculate("D", param, start, const_param, const_param_value, fluid))
+            self.H.append(calculate("H", param, start, const_param, const_param_value, fluid))
+            self.S.append(calculate("S", param, start, const_param, const_param_value, fluid, 4))
+            self.C.append(calculate("CVMASS", param, start, const_param, const_param_value, fluid, 4))
+            self.PRANDTL.append(calculate("PRANDTL", param, start, const_param, const_param_value, fluid))
+            self.V.append(calculate("V", param, start, const_param, const_param_value, fluid))
+            self.L.append(calculate("L", param, start, const_param, const_param_value, fluid))
+            i += 1
+            start += step
         self.graphPT = render_img(fluid, 'PT')
 
 
@@ -115,6 +147,7 @@ class AFirstEnterForm(forms.Form):
     fluid_field = forms.ChoiceField(label='Fluids', choices=temp)
     param_field = forms.ChoiceField(label='Parameter', choices=CHOICES_A)
 
+
 class BFirstEnterForm(forms.Form):
     temp = ()
     for fluid, fluidRU in zip(fluids, fluidsRU):
@@ -125,22 +158,47 @@ class BFirstEnterForm(forms.Form):
     const_param_field = forms.ChoiceField(label='Parameter', choices=CHOICES_CONST)
 
 
-class SecondEnterForm(forms.Form):
+class ASecondEnterForm(forms.Form):
     def __init__(self, fluid, param):
         super().__init__()
         self.fields['fluid'] = forms.CharField(widget=forms.HiddenInput(), initial=fluid)
         self.fields['param'] = forms.CharField(widget=forms.HiddenInput(), initial=param)
         if param == 'T':
-            minimum = round(CP.PropsSI('Ttriple', fluid),2)
-            maximum = round(CP.PropsSI('Tcrit', fluid),2)
+            minimum = round(CP.PropsSI('Ttriple', fluid), 2)
+            maximum = round(CP.PropsSI('Tcrit', fluid), 2)
 
         else:
-            minimum = round(CP.PropsSI('ptriple', fluid),2)
-            maximum = round(CP.PropsSI('pcrit', fluid),2)
+            minimum = round(CP.PropsSI('ptriple', fluid), 2)
+            maximum = round(CP.PropsSI('pcrit', fluid), 2)
 
-        self.fields['start'] = forms.FloatField(label='start value', min_value=minimum, max_value=maximum,
-                                                initial=minimum)
-        self.fields['finish'] = forms.FloatField(label='finish value', min_value=minimum, max_value=maximum,
-                                                 initial=maximum)
-        self.fields['step'] = forms.FloatField(label='step value', min_value=0.1, initial=(maximum - minimum) / 10,
+        self.fields['start'] = forms.FloatField(label='start value', min_value=minimum, max_value=maximum)
+        self.fields['finish'] = forms.FloatField(label='finish value', min_value=minimum, max_value=maximum)
+        self.fields['step'] = forms.FloatField(label='step value', min_value=0.1,
                                                max_value=(maximum - minimum))
+    def clean(self):
+        cleaned_data = super().clean()
+        start = cleaned_data.get("start")
+        finish = cleaned_data.get("finish")
+        if start > finish:
+            raise ValidationError(
+                "Начало не может быть больше конца"
+            )
+
+class BSecondEnterForm(forms.Form):
+    def __init__(self, fluid, param,const_param):
+        super().__init__()
+        self.fields['fluid'] = forms.CharField(widget=forms.HiddenInput(), initial=fluid)
+        self.fields['param'] = forms.CharField(widget=forms.HiddenInput(), initial=param)
+        self.fields['const_param'] = forms.CharField(widget=forms.HiddenInput(), initial=const_param)
+        self.fields['const_param_value'] = forms.FloatField(label='start value')
+        self.fields['start'] = forms.FloatField(label='start value')
+        self.fields['finish'] = forms.FloatField(label='finish value')
+        self.fields['step'] = forms.FloatField(label='step value', min_value=0.1)
+    def clean(self):
+        cleaned_data = super().clean()
+        start = cleaned_data.get("start")
+        finish = cleaned_data.get("finish")
+        if start > finish:
+            raise ValidationError(
+                "Начало не может быть больше конца"
+            )
