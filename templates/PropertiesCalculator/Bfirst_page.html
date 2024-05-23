@@ -145,16 +145,30 @@
 
     <h1>Расчет теплофизических и термодинамических свойств</h1>
 
-    <form class="index-page__form" action="Afirst_page">
-      <button class="button-30" type="submit">Расчет в состоянии насыщения</button>
-    </form>
-    <form class="index-page__form" action="Bfirst_page">
-      <button class="button-30" type="submit">Расчет в состоянии перегретого пара</button>
-    </form>
-    <div class="error-container">
-      {{ error }}
-    </div>
+    <form class="index-page__form" action="Benter_page">
 
+      <label for="fluid-name">
+        <div class="label-wrapper"><span>Вещество</span>
+          {{ form.fluid_field }}
+        </div>
+      </label>
+
+      <label for="input-1">
+        <div class="label-wrapper"><span>Изменяемый параметр</span>
+          {{ form.param_field }}
+        </div>
+      </label>
+
+      <label for="input-1">
+        <div class="label-wrapper"><span>Постоянный параметр</span>
+          {{ form.const_param_field }}
+        </div>
+      </label>
+
+
+
+
+      <button class="button-30" type="submit">Далее</button>
   </section>
 </main>
 </body>

@@ -11,7 +11,10 @@ import CoolProp.Plots as CPP
 #     ("U", "Internal energy [kJ/kg]"), ("H", "Enthalpy [kJ/kg]"), ("S", "Entropy [kJ/kg/K]"),
 #     ("A", "Speed of sound [m/s]"), ("G", "Gibbs function [kJ/kg]"), ("V", "Dynamic viscosity [Pa-s]"),
 #     ("L", "Thermal conductivity [kW/m/K]"), ("I", "Surface Tension [N/m]"), ("w", "Accentric Factor [-]"))
-CHOICES1 = (("P", "Давление [кПa]"), ("T", "Температура [K]"),)
+CHOICES_A = (("P", "Давление [кПa]"), ("T", "Температура [K]"),)
+CHOICES_B = (("P", "Давление [кПa]"), ("T", "Температура [K]"),("D", "Плотность [кг/м3]"),)
+CHOICES_CONST = (("P", "Давление [кПa]"), ("T", "Температура [K]"),("D", "Плотность [кг/м3]"),
+             ("H", "Энтальпия [кДж/кг]"), ("S", "Энтропия [кДж/кг/K]"),)
 
 
 # CHOICES2 = (("T", "Temperature [K]"), ("Q", "Quality [-]"), ("P", "Pressure [kPa]"), ("D", "Density [kg/m3]"),
@@ -104,13 +107,22 @@ fluids = ['1-Butene', 'Acetone', 'Air', 'Ammonia', 'Argon', 'Benzene', 'CarbonDi
           'SulfurDioxide', 'SulfurHexafluoride', 'Toluene', 'trans-2-Butene', 'Water', 'Xenon']
 
 
-class FirstEnterForm(forms.Form):
+class AFirstEnterForm(forms.Form):
     temp = ()
     for fluid, fluidRU in zip(fluids, fluidsRU):
         temp = temp + ((fluid, fluidRU),)
 
     fluid_field = forms.ChoiceField(label='Fluids', choices=temp)
-    param_field = forms.ChoiceField(label='Parameter', choices=CHOICES1)
+    param_field = forms.ChoiceField(label='Parameter', choices=CHOICES_A)
+
+class BFirstEnterForm(forms.Form):
+    temp = ()
+    for fluid, fluidRU in zip(fluids, fluidsRU):
+        temp = temp + ((fluid, fluidRU),)
+
+    fluid_field = forms.ChoiceField(label='Fluids', choices=temp)
+    param_field = forms.ChoiceField(label='Parameter', choices=CHOICES_B)
+    const_param_field = forms.ChoiceField(label='Parameter', choices=CHOICES_CONST)
 
 
 class SecondEnterForm(forms.Form):
