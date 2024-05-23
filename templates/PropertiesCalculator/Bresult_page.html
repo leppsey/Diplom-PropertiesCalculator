@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Result</title>
+  <style>
+    html {
+      line-height: 1.15; /* 1 */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    ul,
+    ol {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    body {
+      height: 100dvh;
+      margin: 0 auto;
+    }
+
+    main {
+      height: 100%;
+    }
+
+    .index-page__section {
+      display: flex;
+      flex-direction: column;
+      padding: 24px 64px;
+      margin: 0 auto;
+      align-items: center;
+      justify-content: center;
+      max-width: 1200px;
+      gap: 28px;
+      height: 100%;
+    }
+
+    .images_container {
+
+      display: flex;
+      width: 100%;
+      flex-wrap: wrap;
+      gap: 8px;
+
+    }
+
+    .result-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .image-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      text-align: center;
+    }
+
+    .image-title {
+      cursor: pointer;
+    }
+
+    .image-item-active img {
+      display: block;
+    }
+
+    .image-item-inactive img {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <section class="index-page__section">
+    <h1>Результаты расчета</h1>
+    <div class="result-container">
+
+      <h2>{{ fluid }}</h2>
+
+      <ul class="images_container">
+        <li class="image-item">
+          <h3 class="image-title">Таблица теплофизических свойств</h3>
+
+          <table>
+            <tbody>
+            <td>
+              {% for item in form.T %}
+                <br>{{ item }}</br>
+              {% endfor %}
+            </td>
+
+            <td>
+              {% for item in form.P %}
+                <br>{{ item }}</br>
+              {% endfor %}
+            </td>
+
+            <td>
+              {% for item in form.D %}
+                <br>{{ item }}</br>
+              {% endfor %}
+            </td>
+
+            <td>
+              {% for item in form.H %}
+                <br>{{ item }}</br>
+              {% endfor %}
+            </td>
+
+            <td>
+              {% for item in form.S %}
+                <br>{{ item }}</br>
+              {% endfor %}
+            </td>
+
+
+            </tbody>
+          </table>
+
+        <h3 class="image-title">Таблица термодинамических свойств</h3>
+        </li>
+        <table>
+          <tbody>
+          <td>
+            {% for item in form.T %}
+              <br>{{ item }}</br>
+            {% endfor %}
+          </td>
+
+          <td>
+            {% for item in form.P %}
+              <br>{{ item }}</br>
+            {% endfor %}
+          </td>
+          <td>
+            {% for item in form.C %}
+              <br>{{ item }}</br>
+            {% endfor %}
+          </td>
+
+          <td>
+            {% for item in form.PRANDTL %}
+              <br>{{ item }}</br>
+            {% endfor %}
+          </td>
+
+          <td>
+            {% for item in form.V %}
+              <br>{{ item }}</br>
+            {% endfor %}
+          </td>
+
+          <td>
+            {% for item in form.L %}
+              <br>{{ item }}</br>
+            {% endfor %}
+          </td>
+          </tbody>
+        </table>
+
+        <li class="image-item">
+          <h3 class="image-title">График зависимости P-T</h3>
+          <img src="data:image/png;base64,{{ form.graphPT }}" alt="NONE">
+        </li>
+      </ul>
+
+
+    </div>
+  </section>
+</main>
+
+<script defer>
+  function activateImage(element) {
+    element.classList.remove('image-item-inactive')
+    element.classList.add('image-item-active')
+  }
+
+  function deactivateImage(element) {
+    element.classList.remove('image-item-active')
+    element.classList.add('image-item-inactive')
+  }
+
+  function deactivateAllImages() {
+    const imageItems = document.querySelectorAll('.image-item')
+    imageItems.forEach((element) => {
+      deactivateImage(element)
+    })
+  }
+
+  function handleImageItemClick(element) {
+    deactivateAllImages()
+    if (element.classList.contains('image-item-inactive')) {
+      activateImage(element)
+    } else {
+      deactivateImage(element)
+    }
+  }
+
+  const imageItems = document.querySelectorAll('.image-item')
+  imageItems.forEach((element) => {
+    element.classList.add('image-item-inactive')
+
+    const imageTitle = element.querySelector('.image-title')
+    imageTitle.addEventListener('click', (_) => handleImageItemClick(element))
+  })
+
+
+</script>
+</body>
+</html>

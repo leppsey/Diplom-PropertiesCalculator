@@ -40,7 +40,7 @@ def render_img(fluid, graph_type):
     return graphic.decode('utf-8')
 
 
-class CalculatedDataForm(forms.Form):
+class ACalculatedDataForm(forms.Form):
     def __init__(self, fluid, param, start, finish, step):
         super().__init__()
 
