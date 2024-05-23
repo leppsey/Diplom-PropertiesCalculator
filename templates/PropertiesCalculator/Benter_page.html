@@ -74,21 +74,6 @@
 
     }
 
-    .error-container {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      color: #d35151;
-      font-size: 18px;
-    {#outline: 1px solid #d35151;#} padding: 10px;
-      border-radius: 4px;
-      margin-top: 20px;
-      width: 300px;
-      align-items: center;
-
-    }
-
-
     .button-30 {
       align-items: center;
       appearance: none;
@@ -136,6 +121,13 @@
       transform: translateY(2px);
     }
 
+
+    .inputs-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
   </style>
 </head>
 <body>
@@ -154,7 +146,7 @@
         </div>
       </label>
 
-      <label for="input-1">
+      <label for="input-1" class="inputs-wrapper">
         <div class="label-wrapper"><span>Не изменяемый параметр</span>
           {{ form.const_param }} {{ const_param }}
         </div>
@@ -162,14 +154,14 @@
           {{ form.const_param_value }} {{ const_param_value }}
         </div>
       </label>
-      
-      <label for="input-1">
+
+      <label for="input-1" class="inputs-wrapper">
         <div class="label-wrapper"><span>Изменяемый параметр</span>
           {{ form.param }} {{ param }}
         </div>
       </label>
 
-      <label for="input-1">
+      <label for="input-1" class="inputs-wrapper">
         <div class="label-wrapper"><span>Начальное значение</span>
           {{ form.start }}
         </div>
