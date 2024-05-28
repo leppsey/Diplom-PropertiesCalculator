@@ -8,7 +8,7 @@ def RUname(param):
         case 'T':
             return 'Температура, K'
         case 'P':
-            return 'Давление, кПа'
+            return 'Давление, Па'
         case 'D':
             return 'Плотность, кг/м3'
         case 'H':
