@@ -12,11 +12,11 @@ from django.core.exceptions import ValidationError
 #     ("U", "Internal energy [kJ/kg]"), ("H", "Enthalpy [kJ/kg]"), ("S", "Entropy [kJ/kg/K]"),
 #     ("A", "Speed of sound [m/s]"), ("G", "Gibbs function [kJ/kg]"), ("V", "Dynamic viscosity [Pa-s]"),
 #     ("L", "Thermal conductivity [kW/m/K]"), ("I", "Surface Tension [N/m]"), ("w", "Accentric Factor [-]"))
-CHOICES_A = (("P", "Давление [кПa]"), ("T", "Температура [K]"),)
-CHOICES_B = (("P", "Давление [кПa]"), ("T", "Температура [K]"), ("D", "Плотность [кг/м3]"),)
-CHOICES_CONST = (("T", "Температура [K]"),("P", "Давление [кПa]"), )
-# CHOICES_CONST = (("T", "Температура [K]"), ("P", "Давление [кПa]"), ("D", "Плотность [кг/м3]"),
-                 # ("H", "Энтальпия [кДж/кг]"), ("S", "Энтропия [кДж/кг/K]"),)
+CHOICES_A = (("P", "Давление [Пa]"), ("T", "Температура [K]"),)
+CHOICES_B = (("P", "Давление [Пa]"), ("T", "Температура [K]"), ("D", "Плотность [кг/м3]"),)
+CHOICES_CONST = (("T", "Температура [K]"),("P", "Давление [Пa]"), )
+# CHOICES_CONST = (("T", "Температура [K]"), ("P", "Давление [Пa]"), ("D", "Плотность [кг/м3]"),
+                 # ("H", "Энтальпия [Дж/кг]"), ("S", "Энтропия [Дж/кг/K]"),)
 
 # CHOICES2 = (("T", "Temperature [K]"), ("Q", "Quality [-]"), ("P", "Pressure [kPa]"), ("D", "Density [kg/m3]"),
 #             ("H", "Enthalpy [kJ/kg]"), ("S", "Entropy [kJ/kg/K]"),)
@@ -40,7 +40,7 @@ def render_img(fluid, graph_type):
     plt = CPP.Plots.PropertyPlot(fluid, graph_type)
 
     plt.calc_isolines()
-    plt.ylabel('Давление, кПа')
+    plt.ylabel('Давление, Па')
     plt.xlabel('Температура, К')
     plt.savefig(buffer, format='png')
     buffer.seek(0)
