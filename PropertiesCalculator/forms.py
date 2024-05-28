@@ -14,25 +14,31 @@ from django.core.exceptions import ValidationError
 #     ("L", "Thermal conductivity [kW/m/K]"), ("I", "Surface Tension [N/m]"), ("w", "Accentric Factor [-]"))
 CHOICES_A = (("P", "Давление [кПa]"), ("T", "Температура [K]"),)
 CHOICES_B = (("P", "Давление [кПa]"), ("T", "Температура [K]"), ("D", "Плотность [кг/м3]"),)
-CHOICES_CONST = (("T", "Температура [K]"), ("P", "Давление [кПa]"), ("D", "Плотность [кг/м3]"),
-                 ("H", "Энтальпия [кДж/кг]"), ("S", "Энтропия [кДж/кг/K]"),)
+CHOICES_CONST = (("T", "Температура [K]"),("P", "Давление [кПa]"), )
+# CHOICES_CONST = (("T", "Температура [K]"), ("P", "Давление [кПa]"), ("D", "Плотность [кг/м3]"),
+                 # ("H", "Энтальпия [кДж/кг]"), ("S", "Энтропия [кДж/кг/K]"),)
 
 # CHOICES2 = (("T", "Temperature [K]"), ("Q", "Quality [-]"), ("P", "Pressure [kPa]"), ("D", "Density [kg/m3]"),
 #             ("H", "Enthalpy [kJ/kg]"), ("S", "Entropy [kJ/kg/K]"),)
 
 
-def calculate(name, input_name1, input_prop1, input_name2, input_prop2, fluid_name):
+def calculate(name, input_name1, input_prop1, input_name2, input_prop2, fluid_name,delimiter=1):
     try:
-        return CP.PropsSI(name, input_name1, input_prop1, input_name2, input_prop2, fluid_name)
+        return CP.PropsSI(name, input_name1, input_prop1, input_name2, input_prop2, fluid_name)/delimiter
     except Exception as error:
         # return error
         return '-'
 def digits(value,numb=2):
-    return round(value,numb)
+    if not value == '-':
+        return round(value,numb)
+    else:
+        return value
+
 
 def render_img(fluid, graph_type):
     buffer = BytesIO()
     plt = CPP.Plots.PropertyPlot(fluid, graph_type)
+
     plt.calc_isolines()
     plt.ylabel('Давление, кПа')
     plt.xlabel('Температура, К')
@@ -49,17 +55,17 @@ class ACalculatedDataForm(forms.Form):
         super().__init__()
 
         self.T = ['Температура, К']
-        self.P = ['Давление, кПа']
+        self.P = ['Давление, Па']
         self.D = ['Плотность(жидкость), кг/м3']
-        self.H = ['Энтальпия(жидкость), Дж/кг']
-        self.S = ['Энтропия(жидкость), Дж/кг/К']
+        self.H = ['Энтальпия(жидкость), кДж/кг']
+        self.S = ['Энтропия(жидкость), кДж/кг/К']
         self.Dp = ['Плотность(сухой пар), кг/м3']
-        self.Hp = ['Энтальпия(сухой пар), Дж/кг']
-        self.Sp = ['Энтропия(сухой пар), Дж/кг/К']
+        self.Hp = ['Энтальпия(сухой пар), кДж/кг']
+        self.Sp = ['Энтропия(сухой пар), кДж/кг/К']
         self.C = ['Теплоемкость при постоянном объеме, Дж/кг/К']
         self.PRANDTL = ['Число Прандтля']
         self.V = ['Динамическая вязкость, Па-с']
-        self.L = ['Теплопроводность, кВт/м/К']
+        self.L = ['Теплопроводность, Вт/м/К']
         i = 1
         start = float(start)
         finish = float(finish)
@@ -69,15 +75,15 @@ class ACalculatedDataForm(forms.Form):
             self.T.append(digits(calculate("T", param, start, 'Q', 0, fluid)))
             self.P.append(digits(calculate("P", param, start, 'Q', 0, fluid)))
             self.D.append(digits(calculate("D", param, start, 'Q', 0, fluid)))
-            self.H.append(digits(calculate("H", param, start, 'Q', 0, fluid)))
-            self.S.append(digits(calculate("S", param, start, 'Q', 0, fluid)))
-            self.Dp.append(digits(calculate("D", param, start, 'Q', 1, fluid)))
-            self.Hp.append(digits(calculate("H", param, start, 'Q', 1, fluid)))
-            self.Sp.append(digits(calculate("S", param, start, 'Q', 1, fluid)))
-            self.C.append(digits(calculate("CVMASS", param, start, 'Q', 0, fluid)))
+            self.H.append(digits(calculate("H", param, start, 'Q', 0, fluid,1000)))
+            self.S.append(digits(calculate("S", param, start, 'Q', 0, fluid,1000),4))
+            self.Dp.append(digits(calculate("D", param, start, 'Q', 1, fluid),4))
+            self.Hp.append(digits(calculate("H", param, start, 'Q', 1, fluid,1000)))
+            self.Sp.append(digits(calculate("S", param, start, 'Q', 1, fluid,1000),4))
+            self.C.append(digits(calculate("CVMASS", param, start, 'Q', 0, fluid),4))
             self.PRANDTL.append(digits(calculate("PRANDTL", param, start, 'Q', 0, fluid)))
-            self.V.append(digits(calculate("V", param, start, 'Q', 0, fluid)))
-            self.L.append(digits(calculate("L", param, start, 'Q', 0, fluid)))
+            self.V.append(digits(calculate("V", param, start, 'Q', 0, fluid),4))
+            self.L.append(digits(calculate("L", param, start, 'Q', 0, fluid),4))
             i += 1
             start += step
         #     для расчета перегретых паров calculate("P", param, start, const_param, const_param_value, fluid)
@@ -88,14 +94,14 @@ class BCalculatedDataForm(forms.Form):
         super().__init__()
 
         self.T = ['Температура, К']
-        self.P = ['Давление, кПа']
+        self.P = ['Давление, Па']
         self.D = ['Плотность, кг/м3']
         self.H = ['Энтальпия, кДж/кг']
         self.S = ['Энтропия, кДж/кг/К']
         self.C = ['Теплоемкость при постоянном объеме, Дж/кг/К']
         self.PRANDTL = ['Число Прандтля']
         self.V = ['Динамическая вязкость, Па-с']
-        self.L = ['Теплопроводность, кВт/м/К']
+        self.L = ['Теплопроводность, Вт/м/К']
         i = 1
         start = float(start)
         finish = float(finish)
@@ -104,16 +110,16 @@ class BCalculatedDataForm(forms.Form):
         while start <= finish:
             self.T.append(digits(calculate("T", param, start, const_param, const_param_value, fluid)))
             self.P.append(digits(calculate("P", param, start, const_param, const_param_value, fluid)))
-            self.D.append(digits(calculate("D", param, start, const_param, const_param_value, fluid)))
-            self.H.append(digits(calculate("H", param, start, const_param, const_param_value, fluid)))
-            self.S.append(digits(calculate("S", param, start, const_param, const_param_value, fluid)))
-            self.C.append(digits(calculate("CVMASS", param, start, const_param, const_param_value, fluid)))
+            self.D.append(digits(calculate("D", param, start, const_param, const_param_value, fluid),4))
+            self.H.append(digits(calculate("H", param, start, const_param, const_param_value, fluid,1000)))
+            self.S.append(digits(calculate("S", param, start, const_param, const_param_value, fluid,1000),4))
+            self.C.append(digits(calculate("CVMASS", param, start, const_param, const_param_value, fluid),4))
             self.PRANDTL.append(digits(calculate("PRANDTL", param, start, const_param, const_param_value, fluid)))
-            self.V.append(digits(calculate("V", param, start, const_param, const_param_value, fluid)))
-            self.L.append(digits(calculate("L", param, start, const_param, const_param_value, fluid)))
+            self.V.append(digits(calculate("V", param, start, const_param, const_param_value, fluid),4))
+            self.L.append(digits(calculate("L", param, start, const_param, const_param_value, fluid),4))
             i += 1
             start += step
-        self.graphPT = render_img(fluid, 'PT')
+        # self.graphPT = render_img(fluid, 'PT')
 
 
 fluidsRU = ['1-Бутен', 'Ацетон', 'Воздух', 'Аммиак', 'Аргон', 'Бензол', 'Диоксид углерода', 'Монооксид углерода',
