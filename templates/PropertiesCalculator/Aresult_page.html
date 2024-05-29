@@ -26,6 +26,7 @@
     body {
       min-height: 100dvh;
       margin: 0 auto;
+      width: max-content;
     }
 
     main {
@@ -75,10 +76,6 @@
       text-align: center;
     }
 
-    .image-title {
-      cursor: pointer;
-    }
-
     .image-item-active img,
     .image-item-active table {
       display: block;
@@ -89,9 +86,37 @@
       display: none;
     }
 
+    .image-item-inactive .arrow-container {
+      transform: rotate(180deg);
+    }
+
+    .image-item-active .arrow-container {
+      transform: rotate(0);
+    }
+
     td:not(:nth-child(-1)) {
       padding-right: 32px;
     }
+
+    .table-cell_value {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 30px;
+    }
+
+    td br:nth-child(1) + .table-cell_value {
+      min-height: 100px;
+    }
+
+    .title-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+
   </style>
 </head>
 <body>
@@ -104,55 +129,64 @@
 
       <ul class="images_container">
         <li class="image-item">
-          <h3 class="image-title">Таблица термодинамических свойств</h3>
+
+          <div class="title-container">
+            <h3>Таблица термодинамических свойств</h3>
+
+            <div class="arrow-container">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M3.29289 8.29289C3.68342 7.90237 4.31658 7.90237 4.70711 8.29289L12 15.5858L19.2929 8.29289C19.6834 7.90237 20.3166 7.90237 20.7071 8.29289C21.0976 8.68342 21.0976 9.31658 20.7071 9.70711L12.7071 17.7071C12.3166 18.0976 11.6834 18.0976 11.2929 17.7071L3.29289 9.70711C2.90237 9.31658 2.90237 8.68342 3.29289 8.29289Z" fill="black"/>
+              </svg>
+            </div>
+           </div>
 
           <table>
             <tbody>
             <td>
               {% for item in form.T %}
-                <br>{{ item }}</br>
+                <br><span class="table-cell_value">{{ item }}</span></br>
               {% endfor %}
             </td>
 
             <td>
               {% for item in form.P %}
-                <br>{{ item }}</br>
+                <br><span class="table-cell_value">{{ item }}</span></br>
               {% endfor %}
             </td>
 
             <td>
               {% for item in form.D %}
-                <br>{{ item }}</br>
+                <br><span class="table-cell_value">{{ item }}</span></br>
               {% endfor %}
             </td>
-            
+
             <td>
               {% for item in form.Dp %}
-                <br>{{ item }}</br>
+                <br><span class="table-cell_value">{{ item }}</span></br>
               {% endfor %}
             </td>
 
             <td>
               {% for item in form.H %}
-                <br>{{ item }}</br>
+                <br><span class="table-cell_value">{{ item }}</span></br>
               {% endfor %}
             </td>
-            
+
             <td>
               {% for item in form.Hp %}
-                <br>{{ item }}</br>
+                <br><span class="table-cell_value">{{ item }}</span></br>
               {% endfor %}
             </td>
 
             <td>
               {% for item in form.S %}
-                <br>{{ item }}</br>
+                <br><span class="table-cell_value">{{ item }}</span></br>
               {% endfor %}
             </td>
-            
+
             <td>
               {% for item in form.Sp %}
-                <br>{{ item }}</br>
+                <br><span class="table-cell_value">{{ item }}</span></br>
               {% endfor %}
             </td>
 
@@ -162,23 +196,39 @@
         </li>
 
         <li class="image-item">
-          <h3 class="image-title">Таблица теплофизических свойств</h3>
+          <div class="title-container">
+            <h3>Таблица теплофизических свойств</h3>
+
+            <div class="arrow-container">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M3.29289 8.29289C3.68342 7.90237 4.31658 7.90237 4.70711 8.29289L12 15.5858L19.2929 8.29289C19.6834 7.90237 20.3166 7.90237 20.7071 8.29289C21.0976 8.68342 21.0976 9.31658 20.7071 9.70711L12.7071 17.7071C12.3166 18.0976 11.6834 18.0976 11.2929 17.7071L3.29289 9.70711C2.90237 9.31658 2.90237 8.68342 3.29289 8.29289Z" fill="black"/>
+              </svg>
+            </div>
+           </div>
+
+
           <table>
             <tbody>
             <td>
               {% for item in form.T %}
-                <br>{{ item }}</br>
+                <br><span class="table-cell_value">{{ item }}</span></br>
               {% endfor %}
             </td>
 
             <td>
               {% for item in form.P %}
-                <br>{{ item }}</br>
+                <br><span class="table-cell_value">{{ item }}</span></br>
               {% endfor %}
             </td>
             <td>
               {% for item in form.C %}
-                <br>{{ item }}</br>
+                <br><span class="table-cell_value">{{ item }}</span></br>
+              {% endfor %}
+            </td>
+
+            <td>
+              {% for item in form.Cp %}
+                <br><span class="table-cell_value">{{ item }}</span></br>
               {% endfor %}
             </td>
             
@@ -190,7 +240,13 @@
 
             <td>
               {% for item in form.PRANDTL %}
-                <br>{{ item }}</br>
+                <br><span class="table-cell_value">{{ item }}</span></br>
+              {% endfor %}
+            </td>
+
+            <td>
+              {% for item in form.PRANDTLp %}
+                <br><span class="table-cell_value">{{ item }}</span></br>
               {% endfor %}
             </td>
             
@@ -202,7 +258,13 @@
 
             <td>
               {% for item in form.V %}
-                <br>{{ item }}</br>
+                <br><span class="table-cell_value">{{ item }}</span></br>
+              {% endfor %}
+            </td>
+
+            <td>
+              {% for item in form.Vp %}
+                <br><span class="table-cell_value">{{ item }}</span></br>
               {% endfor %}
             </td>
             
@@ -214,7 +276,13 @@
 
             <td>
               {% for item in form.L %}
-                <br>{{ item }}</br>
+                <br><span class="table-cell_value">{{ item }}</span></br>
+              {% endfor %}
+            </td>
+
+            <td>
+              {% for item in form.Lp %}
+                <br><span class="table-cell_value">{{ item }}</span></br>
               {% endfor %}
             </td>
             
@@ -228,7 +296,16 @@
         </li>
 
         <li class="image-item">
-          <h3 class="image-title">График зависимости P-H</h3>
+          <div class="title-container">
+            <h3>График зависимости P-H</h3>
+            <div class="arrow-container">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M3.29289 8.29289C3.68342 7.90237 4.31658 7.90237 4.70711 8.29289L12 15.5858L19.2929 8.29289C19.6834 7.90237 20.3166 7.90237 20.7071 8.29289C21.0976 8.68342 21.0976 9.31658 20.7071 9.70711L12.7071 17.7071C12.3166 18.0976 11.6834 18.0976 11.2929 17.7071L3.29289 9.70711C2.90237 9.31658 2.90237 8.68342 3.29289 8.29289Z" fill="black"/>
+              </svg>
+            </div>
+
+          </div>
+
           <img src="data:image/png;base64,{{ form.graphPT }}" alt="NONE">
         </li>
       </ul>
@@ -257,8 +334,8 @@
   }
 
   function handleImageItemClick(element) {
-    deactivateAllImages()
     if (element.classList.contains('image-item-inactive')) {
+      deactivateAllImages()
       activateImage(element)
     } else {
       deactivateImage(element)
@@ -269,10 +346,9 @@
   imageItems.forEach((element) => {
     element.classList.add('image-item-inactive')
 
-    const imageTitle = element.querySelector('.image-title')
+    const imageTitle = element.querySelector('.title-container')
     imageTitle.addEventListener('click', (_) => handleImageItemClick(element))
   })
-
 
 </script>
 </body>
