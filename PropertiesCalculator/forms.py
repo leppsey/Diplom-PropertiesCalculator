@@ -66,10 +66,15 @@ class ACalculatedDataForm(forms.Form):
         self.Dp = ['Плотность(сухой пар), кг/м3']
         self.Hp = ['Энтальпия(сухой пар), кДж/кг']
         self.Sp = ['Энтропия(сухой пар), кДж/кг/К']
-        self.C = ['Теплоемкость при постоянном объеме, Дж/кг/К']
-        self.PRANDTL = ['Число Прандтля']
-        self.V = ['Динамическая вязкость, Па-с']
-        self.L = ['Теплопроводность, Вт/м/К']
+        self.C = ['Теплоемкость при постоянном объеме(жидкость), Дж/кг/К']
+        self.PRANDTL = ['Число Прандтля(жидкость)']
+        self.V = ['Динамическая вязкость(жидкость), Па-с']
+        self.L = ['Теплопроводность(жидкость), Вт/м/К']
+
+        self.Cp = ['Теплоемкость при постоянном объеме(сухой пар), Дж/кг/К']
+        self.PRANDTLp = ['Число Прандтля(сухой пар)']
+        self.Vp = ['Динамическая вязкость(сухой пар), Па-с']
+        self.Lp = ['Теплопроводность(сухой пар), Вт/м/К']
         i = 1
 
         if param == 'P':
@@ -91,6 +96,10 @@ class ACalculatedDataForm(forms.Form):
             self.PRANDTL.append(digits(calculate("PRANDTL", param, start, 'Q', 0, fluid)))
             self.V.append(digits(calculate("V", param, start, 'Q', 0, fluid), 4))
             self.L.append(digits(calculate("L", param, start, 'Q', 0, fluid), 4))
+            self.Cp.append(digits(calculate("CVMASS", param, start, 'Q', 1, fluid), 4))
+            self.PRANDTLp.append(digits(calculate("PRANDTL", param, start, 'Q', 1, fluid)))
+            self.Vp.append(digits(calculate("V", param, start, 'Q', 1, fluid), 4))
+            self.Lp.append(digits(calculate("L", param, start, 'Q', 1, fluid), 4))
             i += 1
             start += step
         #     для расчета перегретых паров calculate("P", param, start, const_param, const_param_value, fluid)
