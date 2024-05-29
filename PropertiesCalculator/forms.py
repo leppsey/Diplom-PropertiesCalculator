@@ -45,7 +45,7 @@ def render_img(fluid, graph_type):
 
     plt.calc_isolines()
     plt.ylabel('Давление, Па')
-    plt.xlabel('Температура, К')
+    plt.xlabel('Энтальпия, Дж/кг')
     plt.savefig(buffer, format='png')
     buffer.seek(0)
     image_png = buffer.getvalue()
