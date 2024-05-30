@@ -34,13 +34,13 @@ def calculate(name, input_name1, input_prop1, input_name2, input_prop2, fluid_na
 
 def digits(value, numb=2):
     if not value == '-':
-        i=0
-        temp=1
+        i = 0
+        temp = 1
         while temp > value:
-            temp=temp/10.0
-            i+=1
-        if i >numb:
-            numb=i+1
+            temp = temp / 10.0
+            i += 1
+        if i > numb:
+            numb = i + 1
         return round(value, numb)
     else:
         return value
@@ -67,23 +67,23 @@ class ACalculatedDataForm(forms.Form):
 
         self.T = ['Температура, К']
         self.P = ['Давление, МПа']
-        self.D = ['Плотность(жидкость), кг/м3']
-        self.H = ['Энтальпия(жидкость), кДж/кг']
-        self.S = ['Энтропия(жидкость), кДж/кг/К']
-        self.Dp = ['Плотность(сухой пар), кг/м3']
-        self.Hp = ['Энтальпия(сухой пар), кДж/кг']
-        self.Sp = ['Энтропия(сухой пар), кДж/кг/К']
-        self.C = ['Теплоемкость при постоянном объеме(жидкость), Дж/кг/К']
-        self.PRANDTL = ['Число Прандтля(жидкость)']
-        self.V = ['Динамическая вязкость(жидкость), Па-с']
-        self.L = ['Теплопроводность(жидкость), Вт/м/К']
+        self.D = ['Плотность (жидкость), кг/м3']
+        self.H = ['Энтальпия (жидкость), кДж/кг']
+        self.S = ['Энтропия (жидкость), кДж/кг/К']
+        self.Dp = ['Плотность (сухой пар), кг/м3']
+        self.Hp = ['Энтальпия (сухой пар), кДж/кг']
+        self.Sp = ['Энтропия (сухой пар), кДж/кг/К']
+        self.C = ['Теплоемкость при постоянном объеме (жидкость), Дж/кг/К']
+        self.PRANDTL = ['Число Прандтля (жидкость)']
+        self.V = ['Динамическая вязкость (жидкость), Па-с']
+        self.L = ['Теплопроводность (жидкость), Вт/м/К']
 
-        self.Cp = ['Теплоемкость при постоянном объеме(сухой пар), Дж/кг/К']
-        self.PRANDTLp = ['Число Прандтля(сухой пар)']
-        self.Vp = ['Динамическая вязкость(сухой пар), Па-с']
-        self.Lp = ['Теплопроводность(сухой пар), Вт/м/К']
+        self.Cp = ['Теплоемкость при постоянном объеме (сухой пар), Дж/кг/К']
+        self.PRANDTLp = ['Число Прандтля (сухой пар)']
+        self.Vp = ['Динамическая вязкость (сухой пар), Па-с']
+        self.Lp = ['Теплопроводность (сухой пар), Вт/м/К']
         i = 1
-        multi=1
+        multi = 1
         if param == 'P':
             multi = pow(10, 6)
         start = float(start) * multi
@@ -92,7 +92,7 @@ class ACalculatedDataForm(forms.Form):
 
         while start <= finish:
             self.T.append(digits(calculate("T", param, start, 'Q', 0, fluid)))
-            self.P.append(digits(calculate("P", param, start, 'Q', 0, fluid)/ pow(10, 6)))
+            self.P.append(digits(calculate("P", param, start, 'Q', 0, fluid) / pow(10, 6)))
             self.D.append(digits(calculate("D", param, start, 'Q', 0, fluid)))
             self.H.append(digits(calculate("H", param, start, 'Q', 0, fluid, 1000)))
             self.S.append(digits(calculate("S", param, start, 'Q', 0, fluid, 1000), 4))
@@ -127,19 +127,19 @@ class BCalculatedDataForm(forms.Form):
         self.V = ['Динамическая вязкость, Па-с']
         self.L = ['Теплопроводность, Вт/м/К']
         i = 1
-        multi=1
+        multi = 1
         if param == 'P':
-            multi= pow(10, 6)
-        start = float(start)*multi
-        finish = float(finish)*multi
-        step = float(step)*multi
-        multi=1
-        if const_param =='P':
-            multi= pow(10, 6)
-        const_param_value = float(const_param_value)*multi
+            multi = pow(10, 6)
+        start = float(start) * multi
+        finish = float(finish) * multi
+        step = float(step) * multi
+        multi = 1
+        if const_param == 'P':
+            multi = pow(10, 6)
+        const_param_value = float(const_param_value) * multi
         while start <= finish:
             self.T.append(digits(calculate("T", param, start, const_param, const_param_value, fluid)))
-            self.P.append(digits(calculate("P", param, start, const_param, const_param_value, fluid)/ pow(10, 6)))
+            self.P.append(digits(calculate("P", param, start, const_param, const_param_value, fluid) / pow(10, 6)))
             self.D.append(digits(calculate("D", param, start, const_param, const_param_value, fluid), 4))
             self.H.append(digits(calculate("H", param, start, const_param, const_param_value, fluid, 1000)))
             self.S.append(digits(calculate("S", param, start, const_param, const_param_value, fluid, 1000), 4))
