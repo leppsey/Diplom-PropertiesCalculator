@@ -34,6 +34,13 @@ def calculate(name, input_name1, input_prop1, input_name2, input_prop2, fluid_na
 
 def digits(value, numb=2):
     if not value == '-':
+        i=0
+        temp=1
+        while temp > value:
+            temp=temp/10.0
+            i+=1
+        if i >numb:
+            numb=i+1
         return round(value, numb)
     else:
         return value
@@ -76,7 +83,7 @@ class ACalculatedDataForm(forms.Form):
         self.Vp = ['Динамическая вязкость(сухой пар), Па-с']
         self.Lp = ['Теплопроводность(сухой пар), Вт/м/К']
         i = 1
-
+        multi=1
         if param == 'P':
             multi = pow(10, 6)
         start = float(start) * multi
