@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from PropertiesCalculator.forms import AFirstEnterForm, ACalculatedDataForm, ASecondEnterForm, fluidsRU, fluids, \
     BFirstEnterForm, BSecondEnterForm,BCalculatedDataForm
-
+import CoolProp.CoolProp as CP
 
 def RUname(param):
     match param:
@@ -35,10 +35,13 @@ def Aenter_page(request):
     fluid = request.GET.get('fluid_field')
     param = request.GET.get('param_field')
     form = ASecondEnterForm(fluid, param)
-
+    Tmin = str(round(CP.PropsSI('Ttriple', fluid), 2))+' K'
+    Tmax =  str(round(CP.PropsSI('Tcrit', fluid), 2))+' K'
+    Pmin =  str(round(CP.PropsSI('ptriple', fluid) / pow(10, 3), 2))+' кПа'
+    Pmax =  str(round(CP.PropsSI('pcrit', fluid) / pow(10, 3), 2))+' кПа'
     param = RUname(param)
     return render(request, 'PropertiesCalculator/Aenter_page.html',
-                  {'form': form, "fluid": fluidRU, "param": param})
+                  {'form': form, "fluid": fluidRU, "param": param,"Tmin":Tmin,"Tmax":Tmax,"Pmin":Pmin,"Pmax":Pmax})
 
 
 def Aresult_page(request):

@@ -25,7 +25,7 @@ CHOICES_CONST = (("T", "Температура [K]"), ("P", "Давление [�
 #             ("H", "Enthalpy [kJ/kg]"), ("S", "Entropy [kJ/kg/K]"),)
 
 
-def calculate(name, input_name1, input_prop1, input_name2, input_prop2, fluid_name, delimiter=1):
+def calculate(name, input_name1, input_prop1, input_name2, input_prop2, fluid_name, delimiter=1.0):
     try:
         return CP.PropsSI(name, input_name1, input_prop1, input_name2, input_prop2, fluid_name) / delimiter
     except Exception as error:
@@ -66,23 +66,23 @@ class ACalculatedDataForm(forms.Form):
     def __init__(self, fluid, param, start, finish, step):
         super().__init__()
 
-        self.T = ['Температура, К']
-        self.P = ['Давление, кПа']
-        self.D = ['Плотность (жидкость), кг/м3']
-        self.H = ['Энтальпия (жидкость), кДж/кг']
-        self.S = ['Энтропия (жидкость), кДж/кг/К']
-        self.Dp = ['Плотность (сухой пар), кг/м3']
-        self.Hp = ['Энтальпия (сухой пар), кДж/кг']
-        self.Sp = ['Энтропия (сухой пар), кДж/кг/К']
-        self.C = ['Теплоемкость при постоянном объеме (жидкость), Дж/кг/К']
-        self.PRANDTL = ['Число Прандтля (жидкость)']
-        self.V = ['Динамическая вязкость (жидкость), Па-с']
-        self.L = ['Теплопроводность (жидкость), Вт/м/К']
+        self.T = ['T, К']
+        self.P = ['P, кПа']
+        self.D = ["ʋ', м3/кг"]
+        self.H = ["h', кДж/кг"]
+        self.S = ["s', кДж/кг/К"]
+        self.Dp = ["ʋ'', м3/кг"]
+        self.Hp = ["h'', кДж/кг"]
+        self.Sp = ["s'', кДж/кг/К"]
+        self.C = ["Cv', Дж/кг/К"]
+        self.PRANDTL = ["Pr'"]
+        self.V = ["Ƞ', Па-с*10⁻⁵"]
+        self.L = ["λ', Вт/м/К"]
 
-        self.Cp = ['Теплоемкость при постоянном объеме (сухой пар), Дж/кг/К']
-        self.PRANDTLp = ['Число Прандтля (сухой пар)']
-        self.Vp = ['Динамическая вязкость (сухой пар), Па-с']
-        self.Lp = ['Теплопроводность (сухой пар), Вт/м/К']
+        self.Cp = ["Cv'', Дж/кг/К"]
+        self.PRANDTLp = ["Pr''"]
+        self.Vp = ["Ƞ'', Па-с*10⁻⁵"]
+        self.Lp = ["λ'', Вт/м/К"]
         i = 1
         multi = 1
         if param == 'P':
@@ -93,20 +93,20 @@ class ACalculatedDataForm(forms.Form):
 
         while start <= finish:
             self.T.append(digits(calculate("T", param, start, 'Q', 0, fluid)))
-            self.P.append(digits(calculate("P", param, start, 'Q', 0, fluid) / pow(10, 3)))
-            self.D.append(digits(calculate("D", param, start, 'Q', 0, fluid)))
+            self.P.append(digits(calculate("P", param, start, 'Q', 0, fluid) / pow(10, 3), 1))
+            self.D.append(digits(1/calculate("D", param, start, 'Q', 0, fluid),4))
             self.H.append(digits(calculate("H", param, start, 'Q', 0, fluid, 1000)))
             self.S.append(digits(calculate("S", param, start, 'Q', 0, fluid, 1000), 4))
-            self.Dp.append(digits(calculate("D", param, start, 'Q', 1, fluid), 4))
+            self.Dp.append(digits(1/calculate("D", param, start, 'Q', 1, fluid), 4))
             self.Hp.append(digits(calculate("H", param, start, 'Q', 1, fluid, 1000)))
             self.Sp.append(digits(calculate("S", param, start, 'Q', 1, fluid, 1000), 4))
             self.C.append(digits(calculate("CVMASS", param, start, 'Q', 0, fluid), 4))
             self.PRANDTL.append(digits(calculate("PRANDTL", param, start, 'Q', 0, fluid)))
-            self.V.append(digits(calculate("V", param, start, 'Q', 0, fluid), 4))
+            self.V.append(digits(calculate("V", param, start, 'Q', 0, fluid,0.00001), 4))
             self.L.append(digits(calculate("L", param, start, 'Q', 0, fluid), 4))
             self.Cp.append(digits(calculate("CVMASS", param, start, 'Q', 1, fluid), 4))
             self.PRANDTLp.append(digits(calculate("PRANDTL", param, start, 'Q', 1, fluid)))
-            self.Vp.append(digits(calculate("V", param, start, 'Q', 1, fluid), 4))
+            self.Vp.append(digits(calculate("V", param, start, 'Q', 1, fluid,0.00001), 4))
             self.Lp.append(digits(calculate("L", param, start, 'Q', 1, fluid), 4))
             i += 1
             start += step
@@ -118,15 +118,15 @@ class BCalculatedDataForm(forms.Form):
     def __init__(self, fluid, param, start, finish, step, const_param_value, const_param):
         super().__init__()
 
-        self.T = ['Температура, К']
-        self.P = ['Давление, кПа']
-        self.D = ['Плотность, кг/м3']
-        self.H = ['Энтальпия, кДж/кг']
-        self.S = ['Энтропия, кДж/кг/К']
-        self.C = ['Теплоемкость при постоянном объеме, Дж/кг/К']
-        self.PRANDTL = ['Число Прандтля']
-        self.V = ['Динамическая вязкость, Па-с']
-        self.L = ['Теплопроводность, Вт/м/К']
+        self.T = ['T, К']
+        self.P = ['P, кПа']
+        self.D = ['ʋ, м3/кг']
+        self.H = ['h, кДж/кг']
+        self.S = ['s, кДж/кг/К']
+        self.C = ['Cv, Дж/кг/К']
+        self.PRANDTL = ['Pr']
+        self.V = ['Ƞ, Па-с*10⁻⁵']
+        self.L = ['λ, Вт/м/К']
         i = 1
         multi = 1
         if param == 'P':
@@ -140,20 +140,20 @@ class BCalculatedDataForm(forms.Form):
         const_param_value = float(const_param_value) * multi
         while start <= finish:
             self.T.append(digits(calculate("T", param, start, const_param, const_param_value, fluid)))
-            self.P.append(digits(calculate("P", param, start, const_param, const_param_value, fluid) / pow(10, 3)))
-            self.D.append(digits(calculate("D", param, start, const_param, const_param_value, fluid), 4))
+            self.P.append(digits(calculate("P", param, start, const_param, const_param_value, fluid) / pow(10, 3), 1))
+            self.D.append(digits(1/calculate("D", param, start, const_param, const_param_value, fluid), 4))
             self.H.append(digits(calculate("H", param, start, const_param, const_param_value, fluid, 1000)))
             self.S.append(digits(calculate("S", param, start, const_param, const_param_value, fluid, 1000), 4))
             self.C.append(digits(calculate("CVMASS", param, start, const_param, const_param_value, fluid), 4))
             self.PRANDTL.append(digits(calculate("PRANDTL", param, start, const_param, const_param_value, fluid)))
-            self.V.append(digits(calculate("V", param, start, const_param, const_param_value, fluid), 4))
+            self.V.append(digits(calculate("V", param, start, const_param, const_param_value, fluid,0.00001), 4))
             self.L.append(digits(calculate("L", param, start, const_param, const_param_value, fluid), 4))
             i += 1
             start += step
         # self.graphPT = render_img(fluid, 'PT')
 
 
-fluidsRU = ['Воздух', 'Аммиак', 'Аргон', 'Диоксид углерода', 'Монооксид углерода', 'Циклогексан', 'Циклопентан',
+fluidsRU = ['Вода','Воздух', 'Аммиак', 'Аргон', 'Диоксид углерода', 'Монооксид углерода', 'Циклогексан', 'Циклопентан',
             'Циклопропан', 'Этан', 'Этанол', 'Этилен', 'Фтор', 'Гелий', 'HFE143m', 'Водород', 'Хлороводород',
             'Сероводород', 'Изобутан', 'Изобутен', 'Изогексан', 'Изопентан', 'Криптон', 'Метан', 'Метанол', 'н-Бутан',
             'н-Декан', 'н-Додекан', 'н-Гептан', 'н-Гексан', 'н-Нонан', 'н-Октан', 'н-Пентан', 'н-Пропан', 'н-Ундекан',
@@ -161,9 +161,9 @@ fluidsRU = ['Воздух', 'Аммиак', 'Аргон', 'Диоксид угл
             'R113', 'R114', 'R115', 'R116', 'R12', 'R123', 'R1233zd(E)', 'R1234yf', 'R1234ze(E)', 'R1234ze(Z)', 'R124',
             'R1243zf', 'R125', 'R13', 'R134a', 'R13I1', 'R14', 'R141b', 'R142b', 'R143a', 'R152A', 'R161', 'R21',
             'R218', 'R22', 'R227EA', 'R23', 'R236EA', 'R236FA', 'R245ca', 'R245fa', 'R32', 'R365MFC', 'R40', 'R404A',
-            'R407C', 'R41', 'R410A', 'R507A', 'RC318', 'SES36', 'Диоксид серы', 'Гексафторид серы', 'Толуол', 'Вода',
+            'R407C', 'R41', 'R410A', 'R507A', 'RC318', 'SES36', 'Диоксид серы', 'Гексафторид серы', 'Толуол',
             'Ксенон']
-fluids = ['Air', 'Ammonia', 'Argon', 'CarbonDioxide', 'CarbonMonoxide', 'CycloHexane', 'Cyclopentane', 'CycloPropane',
+fluids = ['Water','Air', 'Ammonia', 'Argon', 'CarbonDioxide', 'CarbonMonoxide', 'CycloHexane', 'Cyclopentane', 'CycloPropane',
           'Ethane', 'Ethanol', 'Ethylene', 'Fluorine', 'Helium', 'HFE143m', 'Hydrogen', 'HydrogenChloride',
           'HydrogenSulfide', 'IsoButane', 'IsoButene', 'Isohexane', 'Isopentane', 'Krypton', 'Methane', 'Methanol',
           'n-Butane', 'n-Decane', 'n-Dodecane', 'n-Heptane', 'n-Hexane', 'n-Nonane', 'n-Octane',
@@ -172,7 +172,7 @@ fluids = ['Air', 'Ammonia', 'Argon', 'CarbonDioxide', 'CarbonMonoxide', 'CycloHe
           'R1234yf', 'R1234ze(E)', 'R1234ze(Z)', 'R124', 'R1243zf', 'R125', 'R13', 'R134a', 'R13I1',
           'R14', 'R141b', 'R142b', 'R143a', 'R152A', 'R161', 'R21', 'R218', 'R22', 'R227EA', 'R23', 'R236EA', 'R236FA',
           'R245ca', 'R245fa', 'R32', 'R365MFC', 'R40', 'R404A', 'R407C', 'R41', 'R410A', 'R507A', 'RC318', 'SES36',
-          'SulfurDioxide', 'SulfurHexafluoride', 'Toluene', 'Water', 'Xenon']
+          'SulfurDioxide', 'SulfurHexafluoride', 'Toluene',  'Xenon']
 
 
 class AFirstEnterForm(forms.Form):
@@ -204,13 +204,15 @@ class ASecondEnterForm(forms.Form):
             maximum = round(CP.PropsSI('Tcrit', fluid), 2)
 
         else:
-            minimum = round(CP.PropsSI('ptriple', fluid) / pow(10, 6), 2)
-            maximum = round(CP.PropsSI('pcrit', fluid) / pow(10, 6), 2)
+            minimum = round(CP.PropsSI('ptriple', fluid) / pow(10, 3), 2)
+            maximum = round(CP.PropsSI('pcrit', fluid) / pow(10, 3), 2)
 
         self.fields['start'] = forms.FloatField(label='start value', min_value=minimum, max_value=maximum)
         self.fields['finish'] = forms.FloatField(label='finish value', min_value=minimum, max_value=maximum)
-        self.fields['step'] = forms.FloatField(label='step value', min_value=0.1,
+        self.fields['step'] = forms.FloatField(label='step value', min_value=0.001,
                                                max_value=(maximum - minimum))
+
+
 
     def clean(self):
         cleaned_data = super().clean()
@@ -231,7 +233,7 @@ class BSecondEnterForm(forms.Form):
         self.fields['const_param_value'] = forms.FloatField(label='start value')
         self.fields['start'] = forms.FloatField(label='start value')
         self.fields['finish'] = forms.FloatField(label='finish value')
-        self.fields['step'] = forms.FloatField(label='step value', min_value=0.1)
+        self.fields['step'] = forms.FloatField(label='step value', min_value=0.001)
 
     def clean(self):
         cleaned_data = super().clean()
