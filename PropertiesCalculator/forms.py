@@ -66,23 +66,39 @@ class ACalculatedDataForm(forms.Form):
     def __init__(self, fluid, param, start, finish, step):
         super().__init__()
 
-        self.T = ['T, К']
-        self.P = ['P, кПа']
-        self.D = ["ʋ', м3/кг"]
-        self.H = ["h', кДж/кг"]
-        self.S = ["s', кДж/кг/К"]
-        self.Dp = ["ʋ'', м3/кг"]
-        self.Hp = ["h'', кДж/кг"]
-        self.Sp = ["s'', кДж/кг/К"]
-        self.C = ["Cv', Дж/кг/К"]
-        self.PRANDTL = ["Pr'"]
-        self.V = ["Ƞ', Па-с*10⁻⁵"]
-        self.L = ["λ', Вт/м/К"]
+        self.T_title = 'T, К'
+        self.P_title = 'P, кПа'
+        self.D_title = "ʋ', м3/кг"
+        self.H_title = "h', кДж/кг"
+        self.S_title = "s', кДж/кг/К"
+        self.Dp_title = "ʋ'', м3/кг"
+        self.Hp_title = "h'', кДж/кг"
+        self.Sp_title = "s'', кДж/кг/К"
+        self.C_title = "Cv', Дж/кг/К"
+        self.PRANDTL_title = "Pr'"
+        self.V_title = "Ƞ', Па-с*10⁻⁵"
+        self.L_title = "λ', Вт/м/К"
+        self.Cp_title = "Cv'', Дж/кг/К"
+        self.PRANDTLp_title = "Pr''"
+        self.Vp_title = "Ƞ'', Па-с*10⁻⁵"
+        self.Lp_title = "λ'', Вт/м/К"
 
-        self.Cp = ["Cv'', Дж/кг/К"]
-        self.PRANDTLp = ["Pr''"]
-        self.Vp = ["Ƞ'', Па-с*10⁻⁵"]
-        self.Lp = ["λ'', Вт/м/К"]
+        self.T =[]
+        self.P =[]
+        self.D =[]
+        self.H =[]
+        self.S =[]
+        self.Dp =[]
+        self.Hp =[]
+        self.Sp =[]
+        self.C =[]
+        self.PRANDTL=[]
+        self.V =[]
+        self.L =[]
+        self.Cp =[]
+        self.PRANDTLp=[]
+        self.Vp =[]
+        self.Lp =[]
         i = 1
         multi = 1
         if param == 'P':
@@ -118,15 +134,24 @@ class BCalculatedDataForm(forms.Form):
     def __init__(self, fluid, param, start, finish, step, const_param_value, const_param):
         super().__init__()
 
-        self.T = ['T, К']
-        self.P = ['P, кПа']
-        self.D = ['ʋ, м3/кг']
-        self.H = ['h, кДж/кг']
-        self.S = ['s, кДж/кг/К']
-        self.C = ['Cv, Дж/кг/К']
-        self.PRANDTL = ['Pr']
-        self.V = ['Ƞ, Па-с*10⁻⁵']
-        self.L = ['λ, Вт/м/К']
+        self.T_title = 'T, К'
+        self.P_title = 'P, кПа'
+        self.D_title = 'ʋ, м3/кг'
+        self.H_title = 'h, кДж/кг'
+        self.S_title = 's, кДж/кг/К'
+        self.C_title = 'Cv, Дж/кг/К'
+        self.PRANDTL_title= 'Pr'
+        self.V_title = 'Ƞ, Па-с*10⁻⁵'
+        self.L_title = 'λ, Вт/м/К'
+        self.T=[]
+        self.P =[]
+        self.D =[]
+        self.H =[]
+        self.S =[]
+        self.C =[]
+        self.PRANDTL = []
+        self.V =[]
+        self.L =[]
         i = 1
         multi = 1
         if param == 'P':
