@@ -13,11 +13,11 @@ from django.core.exceptions import ValidationError
 #     ("A", "Speed of sound [m/s]"), ("G", "Gibbs function [kJ/kg]"), ("V", "Dynamic viscosity [Pa-s]"),
 #     ("L", "Thermal conductivity [kW/m/K]"), ("I", "Surface Tension [N/m]"), ("w", "Accentric Factor [-]"))
 CHOICES_A = (("P", "Давление [кПa]"), ("T", "Температура [K]"),)
-CHOICES_B = (("P", "Давление [кПa]"), ("T", "Температура [K]"), ("D", "Плотность [кг/м3]"),)
+CHOICES_CONST = (("P", "Давление [кПa]"), ("T", "Температура [K]"),)
 # CHOICES_CONST = (("T", "Температура [K]"), ("P", "Давление [кПa]"),)
 
 
-CHOICES_CONST = (("T", "Температура [K]"), ("P", "Давление [кПa]"), ("D", "Плотность [кг/м3]"),
+CHOICES_B = (("T", "Температура [K]"), ("P", "Давление [кПa]"), ("D", "Плотность [кг/м3]"),
                  ("H", "Энтальпия [Дж/кг]"), ("S", "Энтропия [Дж/кг/K]"),)
 
 
