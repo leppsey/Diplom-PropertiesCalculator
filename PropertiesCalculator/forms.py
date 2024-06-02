@@ -25,9 +25,12 @@ CHOICES_CONST = (("T", "Температура [K]"), ("P", "Давление [�
 #             ("H", "Enthalpy [kJ/kg]"), ("S", "Entropy [kJ/kg/K]"),)
 
 
-def calculate(name, input_name1, input_prop1, input_name2, input_prop2, fluid_name, delimiter=1.0):
+def calculate(name, input_name1, input_prop1, input_name2, input_prop2, fluid_name, delimiter=1.0,flag=0):
     try:
-        return CP.PropsSI(name, input_name1, input_prop1, input_name2, input_prop2, fluid_name) / delimiter
+        if flag==0:
+            return CP.PropsSI(name, input_name1, input_prop1, input_name2, input_prop2, fluid_name) / delimiter
+        else:
+            return flag/(CP.PropsSI(name, input_name1, input_prop1, input_name2, input_prop2, fluid_name) / delimiter)
     except Exception as error:
         # return error
         return '-'
@@ -109,11 +112,11 @@ class ACalculatedDataForm(forms.Form):
 
         while start <= finish:
             self.T.append(digits(calculate("T", param, start, 'Q', 0, fluid)))
-            self.P.append(digits(calculate("P", param, start, 'Q', 0, fluid) / pow(10, 3), 1))
-            self.D.append(digits(1000/calculate("D", param, start, 'Q', 0, fluid),4))
+            self.P.append(digits(calculate("P", param, start, 'Q', 0, fluid,1000) , 1))
+            self.D.append(digits(calculate("D", param, start, 'Q', 0, fluid,flag=1000),4))
             self.H.append(digits(calculate("H", param, start, 'Q', 0, fluid, 1000)))
             self.S.append(digits(calculate("S", param, start, 'Q', 0, fluid, 1000), 4))
-            self.Dp.append(digits(1/calculate("D", param, start, 'Q', 1, fluid), 4))
+            self.Dp.append(digits(calculate("D", param, start, 'Q', 1, fluid,flag=1), 4))
             self.Hp.append(digits(calculate("H", param, start, 'Q', 1, fluid, 1000)))
             self.Sp.append(digits(calculate("S", param, start, 'Q', 1, fluid, 1000), 4))
             self.C.append(digits(calculate("CVMASS", param, start, 'Q', 0, fluid), 4))
@@ -165,8 +168,8 @@ class BCalculatedDataForm(forms.Form):
         const_param_value = float(const_param_value) * multi
         while start <= finish:
             self.T.append(digits(calculate("T", param, start, const_param, const_param_value, fluid)))
-            self.P.append(digits(calculate("P", param, start, const_param, const_param_value, fluid) / pow(10, 3), 1))
-            self.D.append(digits(1000/calculate("D", param, start, const_param, const_param_value, fluid), 4))
+            self.P.append(digits(calculate("P", param, start, const_param, const_param_value, fluid,1000) , 1))
+            self.D.append(digits(calculate("D", param, start, const_param, const_param_value, fluid,flag=1000), 4))
             self.H.append(digits(calculate("H", param, start, const_param, const_param_value, fluid, 1000)))
             self.S.append(digits(calculate("S", param, start, const_param, const_param_value, fluid, 1000), 4))
             self.C.append(digits(calculate("CVMASS", param, start, const_param, const_param_value, fluid), 4))
