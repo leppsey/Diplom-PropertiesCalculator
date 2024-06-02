@@ -40,7 +40,7 @@
       margin: 0 auto;
       align-items: center;
       justify-content: center;
-      max-width: 1200px;
+      width: calc(100dvw - 130px);
       gap: 28px;
       height: 100%;
     }
@@ -94,21 +94,6 @@
       transform: rotate(0);
     }
 
-    td:not(:nth-child(-1)) {
-      padding-right: 32px;
-    }
-
-    .table-cell_value {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 30px;
-    }
-
-    td br:nth-child(1) + .table-cell_value {
-      min-height: 100px;
-    }
-
     .title-container {
       display: flex;
       align-items: center;
@@ -116,7 +101,67 @@
       cursor: pointer;
     }
 
+    .table-row__vertical {
+      display: inline-flex;
+      flex-direction: column;
+    }
 
+    .table-column-title {
+      position: sticky;
+      top: 0;
+      background-color: #fff;
+      display: inline-flex;
+      align-items: center;
+      min-height: 100px;
+      min-width: 100px;
+    }
+
+    .table-cell_value {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      width: 100%;
+      min-height: 30px;
+    }
+
+    .table-cell__has-border {
+      border: 1px solid #e3e3e3;
+    }
+
+    .saturated-liquid {
+      cursor: pointer;
+      background-color: #dceeff;
+    }
+
+    .saturated-liquid:hover ::after {
+      font-size: small;
+      position: absolute;
+      content: 'Насыщенная жидкость';
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 4px;
+      background-color: #333;
+      color: #f9f9f9;
+    }
+
+    .saturated-gas {
+      cursor: pointer;
+      background-color: #ededed;
+    }
+
+    .saturated-gas:hover ::after {
+      font-size: small;
+      position: absolute;
+      content: 'Насыщенный пар';
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 4px;
+      background-color: #333;
+      color: #f9f9f9;
+    }
   </style>
 </head>
 <body>
@@ -129,7 +174,6 @@
 
       <ul class="images_container">
         <li class="image-item">
-
           <div class="title-container">
             <h3>Таблица термодинамических свойств</h3>
 
@@ -145,66 +189,95 @@
 
           <table>
             <tbody>
-            <td>
-            <br><span class="table-cell_value">{{ form.T_title }}</span></br>
-              {% for item in form.T %}
-                <br><span class="table-cell_value">{{ item }}</span></br>
-              {% endfor %}
-            </td>
-
-            <td>
-            <br><span class="table-cell_value">{{ form.P_title }}</span></br>
-              {% for item in form.P %}
-                <br><span class="table-cell_value">{{ item }}</span></br>
-              {% endfor %}
-            </td>
-
-            <td>
-            <br><span class="table-cell_value">{{ form.D_title }}</span></br>
-              {% for item in form.D %}
-                <br><span class="table-cell_value">{{ item }}</span></br>
-              {% endfor %}
-            </td>
-
-            
-
-            <td>
-            <br><span class="table-cell_value">{{ form.H_title }}</span></br>
-              {% for item in form.H %}
-                <br><span class="table-cell_value">{{ item }}</span></br>
-              {% endfor %}
-            </td>
-            
-            <td>
-            <br><span class="table-cell_value">{{ form.S_title }}</span></br>
-              {% for item in form.S %}
-                <br><span class="table-cell_value">{{ item }}</span></br>
-              {% endfor %}
-            </td>
-            
-            <td>
-            <br><span class="table-cell_value">{{ form.Dp_title }}</span></br>
-              {% for item in form.Dp %}
-                <br><span class="table-cell_value">{{ item }}</span></br>
-              {% endfor %}
-            </td>
-            <td>
-            <br><span class="table-cell_value">{{ form.Hp_title }}</span></br>
-              {% for item in form.Hp %}
-                <br><span class="table-cell_value">{{ item }}</span></br>
-              {% endfor %}
-            </td>
-
-            
-
-            <td>
-            <br><span class="table-cell_value">{{ form.Sp_title }}</span></br>
-              {% for item in form.Sp %}
-                <br><span class="table-cell_value">{{ item }}</span></br>
-              {% endfor %}
-            </td>
+              <tr class="table-row__vertical">
+                <th class="table-column-title table-cell__has-border" scope="col">
+                  <span class="table-cell_value">{{ form.T_title }}</span>
+                </th>
+                {% for item in form.T %}
+                  <td class="table-cell__has-border">
+                    <span class="table-cell_value">{{ item }}</span>
+                  </td>
+                {% endfor %}
+              </tr>
 
 
+              <tr class="table-row__vertical">
+                <th class="table-column-title table-cell__has-border" scope="col">
+                  <span class="table-cell_value">{{ form.P_title }}</span>
+                </th>
+                {% for item in form.P %}
+                  <td class="table-cell__has-border">
+                    <span class="table-cell_value">{{ item }}</span>
+                  </td>
+                {% endfor %}
+              </tr>
+
+              <tr class="table-row__vertical">
+                <th class="table-column-title table-cell__has-border saturated-liquid" scope="col">
+                  <span class="table-cell_value">{{ form.D_title }}</span>
+                </th>
+                {% for item in form.D %}
+                  <td class="table-cell__has-border">
+                    <span class="table-cell_value">{{ item }}</span>
+                  </td>
+                {% endfor %}
+              </tr>
+
+              <tr class="table-row__vertical">
+                <th class="table-column-title table-cell__has-border saturated-liquid" scope="col">
+                  <span class="table-cell_value">{{ form.H_title }}</span>
+                </th>
+                {% for item in form.H %}
+                  <td class="table-cell__has-border">
+                    <span class="table-cell_value">{{ item }}</span>
+                  </td>
+                {% endfor %}
+              </tr>
+
+
+              <tr class="table-row__vertical">
+                <th class="table-column-title table-cell__has-border saturated-liquid" scope="col">
+                  <span class="table-cell_value">{{ form.S_title }}</span>
+                </th>
+                {% for item in form.S %}
+                  <td class="table-cell__has-border">
+                    <span class="table-cell_value">{{ item }}</span>
+                  </td>
+                {% endfor %}
+              </tr>
+
+              <tr class="table-row__vertical">
+                <th class="table-column-title table-cell__has-border saturated-gas" scope="col">
+                  <span class="table-cell_value">{{ form.Dp_title }}</span>
+                </th>
+                {% for item in form.Dp %}
+                  <td class="table-cell__has-border">
+                    <span class="table-cell_value">{{ item }}</span>
+                  </td>
+                {% endfor %}
+              </tr>
+
+              <tr class="table-row__vertical">
+                <th class="table-column-title table-cell__has-border saturated-gas" scope="col">
+                  <span class="table-cell_value">{{ form.Hp_title }}</span>
+                </th>
+                {% for item in form.Hp %}
+                  <td class="table-cell__has-border">
+                    <span class="table-cell_value">{{ item }}</span>
+                  </td>
+                {% endfor %}
+              </tr>
+
+              <tr class="table-row__vertical">
+                <th class="table-column-title table-cell__has-border saturated-gas" scope="col">
+                  <span class="table-cell_value">{{ form.Sp_title }}</span>
+                </th>
+                {% for item in form.Sp %}
+                  <td class="table-cell__has-border">
+                    <span class="table-cell_value">{{ item }}</span>
+                  </td>
+                {% endfor %}
+              </tr>
             </tbody>
           </table>
         </li>
@@ -223,90 +296,119 @@
             </div>
           </div>
 
-
           <table>
             <tbody>
-            <td>
-            <br><span class="table-cell_value">{{ form.T_title }}</span></br>
-              {% for item in form.T %}
-                <br><span class="table-cell_value">{{ item }}</span></br>
-              {% endfor %}
-            </td>
+              <tr class="table-row__vertical">
+                <th class="table-column-title table-cell__has-border" scope="col">
+                  <span class="table-cell_value">{{ form.T_title }}</span>
+                </th>
+                {% for item in form.T %}
+                  <td class="table-cell__has-border">
+                    <span class="table-cell_value">{{ item }}</span>
+                  </td>
+                {% endfor %}
+              </tr>
 
-            <td>
-            <br><span class="table-cell_value">{{ form.P_title }}</span></br>
-              {% for item in form.P %}
-                <br><span class="table-cell_value">{{ item }}</span></br>
-              {% endfor %}
-            </td>
-            <td>
-            <br><span class="table-cell_value">{{ form.C_title }}</span></br>
-              {% for item in form.C %}
-                <br><span class="table-cell_value">{{ item }}</span></br>
-              {% endfor %}
-            </td>
 
-            
-            
+              <tr class="table-row__vertical">
+                <th class="table-column-title table-cell__has-border" scope="col">
+                  <span class="table-cell_value">{{ form.P_title }}</span>
+                </th>
+                {% for item in form.P %}
+                  <td class="table-cell__has-border">
+                    <span class="table-cell_value">{{ item }}</span>
+                  </td>
+                {% endfor %}
+              </tr>
 
-            <td>
-            <br><span class="table-cell_value">{{ form.PRANDTL_title }}</span></br>
-              {% for item in form.PRANDTL %}
-                <br><span class="table-cell_value">{{ item }}</span></br>
-              {% endfor %}
-            </td>
-            
-            <td>
-            <br><span class="table-cell_value">{{ form.V_title }}</span></br>
-              {% for item in form.V %}
-                <br><span class="table-cell_value">{{ item }}</span></br>
-              {% endfor %}
-            </td>
-            
-            <td>
-            <br><span class="table-cell_value">{{ form.L_title }}</span></br>
-              {% for item in form.L %}
-                <br><span class="table-cell_value">{{ item }}</span></br>
-              {% endfor %}
-            </td>
+              <tr class="table-row__vertical">
+                <th class="table-column-title table-cell__has-border saturated-liquid" scope="col">
+                  <span class="table-cell_value">{{ form.C_title }}</span>
+                </th>
+                {% for item in form.C %}
+                  <td class="table-cell__has-border">
+                    <span class="table-cell_value">{{ item }}</span>
+                  </td>
+                {% endfor %}
+              </tr>
 
-            <td>
-            <br><span class="table-cell_value">{{ form.Cp_title }}</span></br>
-              {% for item in form.Cp %}
-                <br><span class="table-cell_value">{{ item }}</span></br>
-              {% endfor %}
-            </td>
-            
-            <td>
-            <br><span class="table-cell_value">{{ form.PRANDTLp_title }}</span></br>
-              {% for item in form.PRANDTLp %}
-                <br><span class="table-cell_value">{{ item }}</span></br>
-              {% endfor %}
-            </td>
+              <tr class="table-row__vertical">
+                <th class="table-column-title table-cell__has-border saturated-liquid" scope="col">
+                  <span class="table-cell_value">{{ form.PRANDTL_title }}</span>
+                </th>
+                {% for item in form.PRANDTL %}
+                  <td class="table-cell__has-border">
+                    <span class="table-cell_value">{{ item }}</span>
+                  </td>
+                {% endfor %}
+              </tr>
 
-            
 
-            
+              <tr class="table-row__vertical">
+                <th class="table-column-title table-cell__has-border saturated-liquid" scope="col">
+                  <span class="table-cell_value">{{ form.V_title }}</span>
+                </th>
+                {% for item in form.V %}
+                  <td class="table-cell__has-border">
+                    <span class="table-cell_value">{{ item }}</span>
+                  </td>
+                {% endfor %}
+              </tr>
 
-            <td>
-            <br><span class="table-cell_value">{{ form.Vp_title }}</span></br>
-              {% for item in form.Vp %}
-                <br><span class="table-cell_value">{{ item }}</span></br>
-              {% endfor %}
-            </td>
+              <tr class="table-row__vertical">
+                <th class="table-column-title table-cell__has-border saturated-liquid" scope="col">
+                  <span class="table-cell_value">{{ form.L_title }}</span>
+                </th>
+                {% for item in form.L %}
+                  <td class="table-cell__has-border">
+                    <span class="table-cell_value">{{ item }}</span>
+                  </td>
+                {% endfor %}
+              </tr>
 
-            
+              <tr class="table-row__vertical">
+                <th class="table-column-title table-cell__has-border saturated-gas" scope="col">
+                  <span class="table-cell_value">{{ form.Cp_title }}</span>
+                </th>
+                {% for item in form.Cp %}
+                  <td class="table-cell__has-border">
+                    <span class="table-cell_value">{{ item }}</span>
+                  </td>
+                {% endfor %}
+              </tr>
 
-            
+              <tr class="table-row__vertical">
+                <th class="table-column-title table-cell__has-border saturated-gas" scope="col">
+                  <span class="table-cell_value">{{ form.PRANDTLp_title }}</span>
+                </th>
+                {% for item in form.PRANDTLp %}
+                  <td class="table-cell__has-border">
+                    <span class="table-cell_value">{{ item }}</span>
+                  </td>
+                {% endfor %}
+              </tr>
 
-            <td>
-            <br><span class="table-cell_value">{{ form.Lp_title }}</span></br>
-              {% for item in form.Lp %}
-                <br><span class="table-cell_value">{{ item }}</span></br>
-              {% endfor %}
-            </td>
+              <tr class="table-row__vertical">
+                <th class="table-column-title table-cell__has-border saturated-gas" scope="col">
+                  <span class="table-cell_value">{{ form.Vp_title }}</span>
+                </th>
+                {% for item in form.Vp %}
+                  <td class="table-cell__has-border">
+                    <span class="table-cell_value">{{ item }}</span>
+                  </td>
+                {% endfor %}
+              </tr>
 
-            
+              <tr class="table-row__vertical">
+                <th class="table-column-title table-cell__has-border saturated-gas" scope="col">
+                  <span class="table-cell_value">{{ form.Lp_title }}</span>
+                </th>
+                {% for item in form.Lp %}
+                  <td class="table-cell__has-border">
+                    <span class="table-cell_value">{{ item }}</span>
+                  </td>
+                {% endfor %}
+              </tr>
             </tbody>
           </table>
         </li>
