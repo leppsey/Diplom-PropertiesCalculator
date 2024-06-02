@@ -10,7 +10,7 @@ def RUname(param):
         case 'P':
             return 'Давление, кПа'
         case 'D':
-            return 'Плотность, кг/м3'
+            return 'Плотность, кг/м³'
         case 'H':
             return 'Энтальпия, Дж/кг'
         case 'S':

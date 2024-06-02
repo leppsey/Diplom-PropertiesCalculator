@@ -68,10 +68,10 @@ class ACalculatedDataForm(forms.Form):
 
         self.T_title = 'T, К'
         self.P_title = 'P, кПа'
-        self.D_title = "ʋ', м3/кг"
+        self.D_title = "ʋ', м³/кг*10⁻³"
         self.H_title = "h', кДж/кг"
         self.S_title = "s', кДж/кг/К"
-        self.Dp_title = "ʋ'', м3/кг"
+        self.Dp_title = "ʋ'', м³/кг"
         self.Hp_title = "h'', кДж/кг"
         self.Sp_title = "s'', кДж/кг/К"
         self.C_title = "Cv', Дж/кг/К"
@@ -110,7 +110,7 @@ class ACalculatedDataForm(forms.Form):
         while start <= finish:
             self.T.append(digits(calculate("T", param, start, 'Q', 0, fluid)))
             self.P.append(digits(calculate("P", param, start, 'Q', 0, fluid) / pow(10, 3), 1))
-            self.D.append(digits(1/calculate("D", param, start, 'Q', 0, fluid),4))
+            self.D.append(digits(1000/calculate("D", param, start, 'Q', 0, fluid),4))
             self.H.append(digits(calculate("H", param, start, 'Q', 0, fluid, 1000)))
             self.S.append(digits(calculate("S", param, start, 'Q', 0, fluid, 1000), 4))
             self.Dp.append(digits(1/calculate("D", param, start, 'Q', 1, fluid), 4))
@@ -136,7 +136,7 @@ class BCalculatedDataForm(forms.Form):
 
         self.T_title = 'T, К'
         self.P_title = 'P, кПа'
-        self.D_title = 'ʋ, м3/кг'
+        self.D_title = 'ʋ, м³/кг*10⁻³'
         self.H_title = 'h, кДж/кг'
         self.S_title = 's, кДж/кг/К'
         self.C_title = 'Cv, Дж/кг/К'
@@ -166,7 +166,7 @@ class BCalculatedDataForm(forms.Form):
         while start <= finish:
             self.T.append(digits(calculate("T", param, start, const_param, const_param_value, fluid)))
             self.P.append(digits(calculate("P", param, start, const_param, const_param_value, fluid) / pow(10, 3), 1))
-            self.D.append(digits(1/calculate("D", param, start, const_param, const_param_value, fluid), 4))
+            self.D.append(digits(1000/calculate("D", param, start, const_param, const_param_value, fluid), 4))
             self.H.append(digits(calculate("H", param, start, const_param, const_param_value, fluid, 1000)))
             self.S.append(digits(calculate("S", param, start, const_param, const_param_value, fluid, 1000), 4))
             self.C.append(digits(calculate("CVMASS", param, start, const_param, const_param_value, fluid), 4))
