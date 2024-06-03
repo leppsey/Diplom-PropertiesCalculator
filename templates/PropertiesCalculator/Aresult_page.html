@@ -45,10 +45,20 @@
       height: 100%;
     }
 
+    @media (max-width: 1140px) {
+      .index-page__section {
+        padding: 24px 32px;
+        width: max-content;
+      }
+
+    }
+
     .images_container {
       display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       width: 100%;
-      flex-wrap: wrap;
       gap: 24px;
     }
 
@@ -72,7 +82,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: 100%;
+      width: max-content;
       text-align: center;
     }
 
@@ -162,6 +172,12 @@
       background-color: #333;
       color: #f9f9f9;
     }
+
+    .table-body {
+      display: flex;
+      flex-wrap: nowrap;
+    }
+
   </style>
 </head>
 <body>
@@ -188,7 +204,7 @@
           </div>
 
           <table>
-            <tbody>
+            <tbody class="table-body">
               <tr class="table-row__vertical">
                 <th class="table-column-title table-cell__has-border" scope="col">
                   <span class="table-cell_value">{{ form.T_title }}</span>
@@ -297,7 +313,7 @@
           </div>
 
           <table>
-            <tbody>
+            <tbody class="table-body">
               <tr class="table-row__vertical">
                 <th class="table-column-title table-cell__has-border" scope="col">
                   <span class="table-cell_value">{{ form.T_title }}</span>
