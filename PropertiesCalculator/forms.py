@@ -71,7 +71,7 @@ class ACalculatedDataForm(forms.Form):
 
         self.T_title = 'T, К'
         self.P_title = 'P, кПа'
-        self.D_title = "ʋ', м³/кг*10⁻³"
+        self.D_title = "ʋ', м³/кг*10³"
         self.H_title = "h', кДж/кг"
         self.S_title = "s', кДж/кг/К"
         self.Dp_title = "ʋ'', м³/кг"
@@ -79,11 +79,11 @@ class ACalculatedDataForm(forms.Form):
         self.Sp_title = "s'', кДж/кг/К"
         self.C_title = "Cv', Дж/кг/К"
         self.PRANDTL_title = "Pr'"
-        self.V_title = "Ƞ', Па-с*10⁻⁵"
+        self.V_title = "Ƞ', Па-с*10⁵"
         self.L_title = "λ', Вт/м/К"
         self.Cp_title = "Cv'', Дж/кг/К"
         self.PRANDTLp_title = "Pr''"
-        self.Vp_title = "Ƞ'', Па-с*10⁻⁵"
+        self.Vp_title = "Ƞ'', Па-с*10⁵"
         self.Lp_title = "λ'', Вт/м/К"
 
         self.T =[]
@@ -139,12 +139,12 @@ class BCalculatedDataForm(forms.Form):
 
         self.T_title = 'T, К'
         self.P_title = 'P, кПа'
-        self.D_title = 'ʋ, м³/кг*10⁻³'
+        self.D_title = 'ʋ, м³/кг*10³'
         self.H_title = 'h, кДж/кг'
         self.S_title = 's, кДж/кг/К'
         self.C_title = 'Cv, Дж/кг/К'
         self.PRANDTL_title= 'Pr'
-        self.V_title = 'Ƞ, Па-с*10⁻⁵'
+        self.V_title = 'Ƞ, Па-с*10⁵'
         self.L_title = 'λ, Вт/м/К'
         self.T=[]
         self.P =[]
